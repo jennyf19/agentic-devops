@@ -191,7 +191,7 @@ SessionFactory.create() need to mock SessionFactory.builder() instead.
 
 ## The Worked Example
 
-Look at the [XStream CVE skill](skill/remediate-xstream-cve.md) from the demo. It follows this exact structure:
+Look at the [XStream CVE skill](../examples/remediate-xstream-cve.md) from the demo. It follows this exact structure:
 
 | Section | How XStream does it |
 |---------|-------------------|

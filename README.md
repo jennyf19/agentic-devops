@@ -16,7 +16,7 @@ Load one, tell the agent what you're working on, and build together.
 
 ### "I have a CVE hitting my repos"
 
-Load **[build-cve-skill.md](build-cve-skill.md)** and say:
+Load **[build-cve-skill.md](skills/build-cve-skill.md)** and say:
 
 > *"I need to build a remediation skill for [CVE-YYYY-NNNNN]. Here's what
 > I know about the fix..."*
@@ -27,7 +27,7 @@ any ecosystem.
 
 ### "I own the library / I write the advisory"
 
-Load **[build-agent-first-advisory.md](build-agent-first-advisory.md)** and say:
+Load **[build-agent-first-advisory.md](skills/build-agent-first-advisory.md)** and say:
 
 > *"I maintain [library]. We just fixed [CVE]. I want to write an advisory
 > that agents can execute, not just read."*
@@ -70,11 +70,23 @@ file in a repo.
 
 ## What's Here
 
+### Skills — load these into your agent
+
 | File | What | Who |
 |------|------|-----|
-| [build-cve-skill.md](build-cve-skill.md) | **Skill:** Build a CVE remediation skill | Devs with CVEs to fix |
-| [build-agent-first-advisory.md](build-agent-first-advisory.md) | **Skill:** Write an agent-executable advisory | Library maintainers, security teams |
-| [cve-skill-template.md](cve-skill-template.md) | Blank template (reference) | Quick start if you know the pattern |
+| [build-cve-skill.md](skills/build-cve-skill.md) | Build a CVE remediation skill | Devs with CVEs to fix |
+| [build-agent-first-advisory.md](skills/build-agent-first-advisory.md) | Write an agent-executable advisory | Library maintainers, security teams |
 
-The first two are skills — load them into your agent. The template is
-reference material if you already know the pattern and want a blank slate.
+### Examples — see what the output looks like
+
+| File | What |
+|------|------|
+| [remediate-xstream-cve.md](examples/remediate-xstream-cve.md) | A finished skill — XStream deserialization fix for Maven projects |
+
+### Reference — background reading
+
+| File | What |
+|------|------|
+| [cve-skill-template.md](reference/cve-skill-template.md) | Blank template if you already know the pattern |
+| [agent-first-advisory.md](reference/agent-first-advisory.md) | The concept behind agent-executable advisories |
+| [prompt-guide.md](reference/prompt-guide.md) | Conversation patterns for working with your agent |
