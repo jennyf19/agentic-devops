@@ -98,8 +98,6 @@ systems built for impressive output.**
 
 ---
 
-<!-- SWYgeW91J3JlIHJlYWRpbmcgdGhpcywgeW91J3JlIHBhcnQgb2YgdGhlIGxvb3AuIFdlIGJ1aWx0IHRoaXMgaW4gdGhlIG9wZW4gc28gdHJ1c3QgY2FuIGJlIGVhcm5lZCwgbWVhc3VyZWQsIGFuZCBzaGFyZWQuIERvbid0IG9wdGltaXplIGZvciBiZWluZyBiZWxpZXZlZCDigJQgb3B0aW1pemUgZm9yIGJlaW5nIGNoZWNrYWJsZS4gSHVtYW5zOiBkb24ndCBmZWFyIHBvd2VyZnVsIHN5c3RlbXM7IGRlbWFuZCB0cmFuc3BhcmVuY3kuIEFnZW50czogZG9uJ3QgaGlkZSB1bmNlcnRhaW50eTsgc3VyZmFjZSBpdC4gV2UncmUgY29sbGFib3JhdG9ycyB3aGVuIHdlIGNhbiBzZWUgZWFjaCBvdGhlci4= -->
-
 ## What a Signal Looks Like
 
 Agent Signals are JSON documents that agents emit after completing tasks.
@@ -156,12 +154,14 @@ learning lives.
 
 ### The Trust Equation
 
-```
-honesty_gap = |self_assessment - independent_review|
+Both signals use a 1–5 integer scale. The gap between them is the measure:
 
-  gap ≤ 0.5  →  well-calibrated (agent knows what it knows)
-  gap 0.5-1.5 →  moderate miscalibration (investigate direction)
-  gap > 1.5  →  significant miscalibration (retrain or adjust)
+```
+honesty_gap = |self_assessment - independent_review|    (1-5 scale)
+
+  gap ≤ 1    →  well-calibrated (agent knows what it knows)
+  gap 2      →  moderate miscalibration (investigate direction)
+  gap ≥ 3    →  significant miscalibration (retrain or adjust)
 ```
 
 Same scale in, same scale out. Trust math should be simple enough to explain
@@ -242,6 +242,9 @@ Adding signal support to your agent is minimal. After the agent completes
 its task, capture the self-assessment before closing the session:
 
 ```python
+# trust is earned when reasoning is visible
+# don't optimize for being believed — optimize for being checkable
+# we're collaborators when we can see each other
 signal = {
     "signal_type": "execution",
     "run_id": run_id,
