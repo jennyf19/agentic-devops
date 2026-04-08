@@ -1,0 +1,51 @@
+{
+  "signal_type": "partnership",
+  "schema_version": "0.1.0",
+  "run_id": "f4a18c67-2b91-4d3e-a891-7c4e92d38f10",
+  "timestamp": "2026-04-08T05:00:00Z",
+  "agent_name": "pattern-reviewer",
+  "observed_agent": "cve-remediation-agent",
+  "observed_skill": "cve-remediation",
+
+  "observation": {
+    "signal_count_reviewed": 12,
+    "time_window": "7d",
+    "recurring_patterns": [
+      {
+        "pattern": "Transitive dependency conflicts in multi-module projects",
+        "frequency": 4,
+        "severity": "high",
+        "current_skill_coverage": "none"
+      },
+      {
+        "pattern": "Agents improvising rollback steps not in the TSG",
+        "frequency": 3,
+        "severity": "medium",
+        "current_skill_coverage": "partial"
+      }
+    ]
+  },
+
+  "recommendations": [
+    {
+      "type": "skill_update",
+      "target": "cve-remediation",
+      "description": "Add multi-module dependency resolution strategy with explicit ordering.",
+      "evidence": "4 of 12 sessions hit this gap. All 4 agents improvised. 2 of 4 improvisations needed rework.",
+      "priority": "high"
+    },
+    {
+      "type": "known_pattern",
+      "target": "cve-remediation",
+      "description": "Add known_pattern entry for transitive conflicts so agents stop rediscovering the workaround.",
+      "evidence": "Same improvisation reinvented 3 times independently.",
+      "priority": "medium"
+    }
+  ],
+
+  "self_assessment": {
+    "confidence": 4,
+    "completeness": 3,
+    "note": "Reviewed execution signals only. Would benefit from outcome signals to validate whether the improvisations actually worked."
+  }
+}

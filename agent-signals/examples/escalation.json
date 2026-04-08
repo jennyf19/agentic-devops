@@ -1,0 +1,32 @@
+{
+  "signal_type": "escalation",
+  "schema_version": "0.1.0",
+  "run_id": "c7f1a902-88d4-4e1b-b3a6-5e9d22f14c01",
+  "timestamp": "2026-04-08T04:30:00Z",
+  "agent_name": "cve-remediation-agent",
+  "skill_used": "cve-remediation",
+
+  "self_assessment": {
+    "accuracy": 2,
+    "completeness": 1,
+    "confidence": 1
+  },
+
+  "escalation": {
+    "reason": "Breaking change in public API — cannot auto-resolve without human decision.",
+    "blocked_on": "Requires architectural review: dependency update changes return types in 3 public endpoints.",
+    "attempted": [
+      "Tried shimming old return types — introduces runtime overhead.",
+      "Tried pinning to last safe minor — still vulnerable to CVE.",
+      "Tried isolating affected module — breaks integration tests."
+    ],
+    "recommendation": "Human review needed. Suggest versioning the API (v2) and migrating consumers incrementally."
+  },
+
+  "patterns": {
+    "what_worked": "Detection and impact analysis completed successfully.",
+    "what_was_hard": "Every auto-fix path introduces a different regression.",
+    "skill_gap": "No guidance for breaking-change CVEs that affect public API surface.",
+    "recurring_pattern": "Second escalation this month for public API breaking changes."
+  }
+}
