@@ -108,6 +108,7 @@ Two core types:
 ```json
 {
   "signal_type": "execution",
+  "schema_version": "0.1.0",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
   "timestamp": "2026-04-08T03:00:00Z",
   "agent_name": "cve-remediation-agent",
@@ -139,6 +140,7 @@ Two core types:
 ```json
 {
   "signal_type": "outcome",
+  "schema_version": "0.1.0",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
   "timestamp": "2026-04-08T03:15:00Z",
   "agent_name": "quality-evaluator",
@@ -153,6 +155,7 @@ Two core types:
 ```json
 {
   "signal_type": "partnership",
+  "schema_version": "0.1.0",
   "run_id": "f4a18c67-2b91-4d3e-a891-7c4e92d38f10",
   "timestamp": "2026-04-08T05:00:00Z",
   "agent_name": "pattern-reviewer",
@@ -198,10 +201,11 @@ self-assessment and independent review is where the learning lives.
 
 ### The Trust Equation
 
-Both signals use a 1–5 integer scale. The gap between them is the measure:
+Both signals use a 1–5 integer scale. Compare any dimension of
+`self_assessment` (e.g., `confidence`) against the outcome's `quality_rating`:
 
 ```
-honesty_gap = |self_assessment - independent_review|    (1-5 scale)
+honesty_gap = |self_assessment.confidence - quality_rating|    (1-5 scale)
 
   gap ≤ 1    →  well-calibrated (agent knows what it knows)
   gap 2      →  moderate miscalibration (investigate direction)
@@ -284,8 +288,9 @@ remediation sessions:
 
 ### 1. Add a signals directory to your project
 
-This is the protocol convention. Add a `signals/` directory alongside your
-agent code:
+This is the protocol convention. `signals/` holds your signal *definitions* —
+the schema, examples, and adapters. Runtime signal *output* goes to `.signals/`
+(see step 2). Add a `signals/` directory alongside your agent code:
 
 ```
 your-project/
@@ -328,7 +333,7 @@ signal = {
     "signal_type": "execution",
     "schema_version": "0.1.0",
     "run_id": str(uuid.uuid4()),
-    "timestamp": datetime.now(timezone.utc).isoformat(),
+    "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     "agent_name": "my-agent",
     "skill_used": "my-skill",
     "self_assessment": {
