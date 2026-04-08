@@ -148,9 +148,53 @@ Two core types:
 }
 ```
 
+**Partnership signal** — agents improving each other:
+
+```json
+{
+  "signal_type": "partnership",
+  "run_id": "f4a18c67-2b91-4d3e-a891-7c4e92d38f10",
+  "timestamp": "2026-04-08T05:00:00Z",
+  "agent_name": "pattern-reviewer",
+  "observed_agent": "cve-remediation-agent",
+  "observed_skill": "cve-remediation",
+
+  "observation": {
+    "signal_count_reviewed": 12,
+    "time_window": "7d",
+    "recurring_patterns": [
+      {
+        "pattern": "Transitive dependency conflicts in multi-module projects",
+        "frequency": 4,
+        "severity": "high",
+        "current_skill_coverage": "none"
+      }
+    ]
+  },
+
+  "recommendations": [
+    {
+      "type": "skill_update",
+      "target": "cve-remediation",
+      "description": "Add multi-module dependency resolution strategy.",
+      "evidence": "4 of 12 sessions hit this gap. All improvised. 2 needed rework.",
+      "priority": "high"
+    }
+  ],
+
+  "self_assessment": {
+    "confidence": 4,
+    "completeness": 3,
+    "note": "Reviewed execution signals only. Would benefit from outcome signals to validate."
+  }
+}
+```
+
 The execution signal tells you what the agent *thought* happened. The outcome
-signal tells you what *actually* happened. The gap between them is where the
-learning lives.
+signal tells you what *actually* happened. The partnership signal is where
+agents start improving each other — one agent reviews another's signals,
+spots recurring patterns, and recommends skill updates. The gap between
+self-assessment and independent review is where the learning lives.
 
 ### The Trust Equation
 
@@ -250,7 +294,8 @@ your-project/
 │   ├── examples/             # Optional: example signals for reference
 │   │   ├── execution.json
 │   │   ├── outcome.json
-│   │   └── escalation.json
+│   │   ├── escalation.json
+│   │   └── partnership.json
 │   └── adapters/             # Optional: platform-specific dispatch
 │       ├── github-issues/
 │       ├── opentelemetry/
