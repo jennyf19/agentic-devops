@@ -129,4 +129,4 @@ what the agent learned. The system compounds.
 - [How Confessions Can Keep Language Models Honest](https://openai.com/index/how-confessions-can-keep-language-models-honest/) — OpenAI
 - [Scalable Oversight of AI Systems](https://www-cdn.anthropic.com/0dd865075ad3132672ee0ab40b05a53f14cf5288.pdf) — Anthropic
 - [Agent Skills Protocol](https://agentskills.io) — Anthropic
-- [Agent Signals Specification](https://github.com/jeferrie_microsoft/AI-Experiments/tree/main/agentsignals) — The full protocol
+- [Agent Signals](agent-signals/) — The open protocol for agent self-assessment and trust measurement

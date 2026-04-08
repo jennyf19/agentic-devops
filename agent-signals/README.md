@@ -102,8 +102,8 @@ systems built for impressive output.**
 
 ## What a Signal Looks Like
 
-[Agent Signals](https://github.com/jeferrie_microsoft/AI-Experiments/tree/main/agentsignals)
-are JSON documents that agents emit after completing tasks. Two core types:
+Agent Signals are JSON documents that agents emit after completing tasks.
+Two core types:
 
 **Execution signal** — the agent's self-assessment:
 
@@ -136,7 +136,7 @@ are JSON documents that agents emit after completing tasks. Two core types:
 }
 ```
 
-**Outcome signal**— independent evaluation:
+**Outcome signal** — independent evaluation:
 
 ```json
 {
@@ -231,14 +231,47 @@ remediation sessions:
    partners in the feedback loop. Not subjects of surveillance.
 
 5. **The gap between self-assessment and outcome is the most valuable metric.**
-   When an agent rates itself 0.9 confidence but the PR needs significant
-   rework — that gap teaches the system where calibration is off.
+   When an agent rates itself 4 out of 5 on confidence but the PR needs
+   significant rework — that gap teaches the system where calibration is off.
 
 ---
 
-## Go Deeper
+## Implementing Signals
 
-- **[Agent Signals Specification](https://github.com/jeferrie_microsoft/AI-Experiments/tree/main/agentsignals)** — The full protocol: schema, signal types, trust math, domain instances, client implementation
+Adding signal support to your agent is minimal. After the agent completes
+its task, capture the self-assessment before closing the session:
+
+```python
+signal = {
+    "signal_type": "execution",
+    "run_id": run_id,
+    "timestamp": datetime.utcnow().isoformat() + "Z",
+    "agent_name": agent_name,
+    "skill_used": skill_name,
+    "self_assessment": {
+        "accuracy": rate(1, 5),
+        "completeness": rate(1, 5),
+        "confidence": rate(1, 5)
+    },
+    "patterns": {
+        "what_worked": "...",
+        "what_was_hard": "...",
+        "skill_gap": "...",
+        "tsg_gap": "..."
+    }
+}
+```
+
+The key constraint: **this step must be mandatory.** Agents skip optional
+self-assessment. Make it a checkpoint — no closing message until the signal
+is captured.
+
+Dispatch wherever makes sense for your system — API endpoint, GitHub Issue,
+local file. The schema matters more than the transport.
+
+---
+
+## See Also
+
 - **[Agent Skills](https://agentskills.io)** — The input half of the loop (Anthropic's protocol)
-- **[What Are Signals?](https://github.com/jeferrie_microsoft/AI-Experiments/blob/main/agentsignals/docs/what-are-signals.md)** — The concept explained in 5 minutes
-- **[Client Implementation Guide](https://github.com/jeferrie_microsoft/AI-Experiments/blob/main/agentsignals/docs/client-implementation.md)** — Add signal support to your agent in ~20 lines
+- **[The Interaction Changes Everything](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/)** — The research behind treating agents as collaborators
