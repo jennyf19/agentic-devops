@@ -1,0 +1,27 @@
+{
+  "signal_type": "execution",
+  "schema_version": "0.1.0",
+  "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
+  "timestamp": "2026-04-08T03:00:00Z",
+  "agent_name": "cve-remediation-agent",
+  "skill_used": "cve-remediation",
+  "mode": "interactive",
+
+  "self_assessment": {
+    "accuracy": 4,
+    "completeness": 5,
+    "confidence": 3,
+    "tsg_alignment": 2,
+    "developer_experience": 4
+  },
+
+  "patterns": {
+    "what_worked": "Standard dependency update path. Clear version pinning in lockfile.",
+    "what_was_hard": "Transitive dependency conflict required manual resolution order.",
+    "skill_gap": "No handling for Gradle Kotlin DSL projects.",
+    "tsg_gap": "Missing rollback steps for multi-module projects.",
+    "improvisation": "Adapted single-module rollback pattern to multi-module. Untested.",
+    "recurring_pattern": "Third time this week seeing this transitive conflict.",
+    "environment_blockers": ""
+  }
+}

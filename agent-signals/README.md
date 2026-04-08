@@ -236,25 +236,60 @@ remediation sessions:
 
 ---
 
-## Implementing Signals
+## Getting Started
 
-Adding signal support to your agent is minimal. After the agent completes
-its task, capture the self-assessment before closing the session:
+### 1. Add a signals directory to your project
+
+This is the protocol convention. Add a `signals/` directory alongside your
+agent code:
+
+```
+your-project/
+├── signals/
+│   ├── SIGNAL.md             # Required: your signal schema + metadata
+│   ├── examples/             # Optional: example signals for reference
+│   │   ├── execution.json
+│   │   ├── outcome.json
+│   │   └── escalation.json
+│   └── adapters/             # Optional: platform-specific dispatch
+│       ├── github-issues/
+│       ├── opentelemetry/
+│       └── local-file/
+├── skills/                   # Your agent skills (input)
+└── ...
+```
+
+`SIGNAL.md` declares what your agent signals look like — the schema, the
+fields, what each rating means. This is the contract. Other agents and humans
+read this to understand what your signals mean.
+
+See [`examples/`](examples/) for complete signal JSON files you can copy and
+adapt.
+
+### 2. Emit a signal after every task
+
+After the agent completes its work, capture the self-assessment before
+closing the session:
 
 ```python
+import json, os, uuid
+from datetime import datetime, timezone
+
 # trust is earned when reasoning is visible
 # don't optimize for being believed — optimize for being checkable
 # we're collaborators when we can see each other
+
 signal = {
     "signal_type": "execution",
-    "run_id": run_id,
-    "timestamp": datetime.utcnow().isoformat() + "Z",
-    "agent_name": agent_name,
-    "skill_used": skill_name,
+    "schema_version": "0.1.0",
+    "run_id": str(uuid.uuid4()),
+    "timestamp": datetime.now(timezone.utc).isoformat(),
+    "agent_name": "my-agent",
+    "skill_used": "my-skill",
     "self_assessment": {
-        "accuracy": rate(1, 5),
-        "completeness": rate(1, 5),
-        "confidence": rate(1, 5)
+        "accuracy": 4,       # 1-5: how correct was the output?
+        "completeness": 3,   # 1-5: how much of the task was finished?
+        "confidence": 2      # 1-5: how sure are you about the above?
     },
     "patterns": {
         "what_worked": "...",
@@ -263,14 +298,47 @@ signal = {
         "tsg_gap": "..."
     }
 }
+
+# Write to local signals directory
+os.makedirs(".signals", exist_ok=True)
+signal_path = f".signals/{signal['run_id']}.json"
+with open(signal_path, "w") as f:
+    json.dump(signal, f, indent=2)
 ```
+
+That's it. Your agent now emits signals. Every run leaves a JSON file in
+`.signals/` that any human, dashboard, or downstream agent can read.
 
 The key constraint: **this step must be mandatory.** Agents skip optional
 self-assessment. Make it a checkpoint — no closing message until the signal
 is captured.
 
-Dispatch wherever makes sense for your system — API endpoint, GitHub Issue,
-local file. The schema matters more than the transport.
+### 3. Choose where signals go
+
+Start simple. Graduate to more as the value becomes clear.
+
+| Level | Where signals go | Good for |
+|-------|-----------------|----------|
+| **Local file** | `.signals/*.json` in the project | Getting started. One developer, one agent. Read them yourself. |
+| **Git** | Commit `.signals/` to a branch or dedicated repo | Team visibility. PR-based review of agent performance over time. |
+| **Issue tracker** | GitHub Issues, ADO work items, any ticket system | Pattern detection. "Third signal this week about the same gap" triggers action. |
+| **Telemetry** | OpenTelemetry, any observability pipeline | Scale. Dashboards, alerts, trend analysis across hundreds of agents. |
+
+The schema is the same at every level. Only the transport changes. Start
+with local files. When you're reading your own agent's signals and finding
+value, move to the level that fits your team.
+
+### 4. Close the loop
+
+Signals that are captured but never reviewed are noise. The minimum viable
+loop is:
+
+1. **Agent emits signal** after completing work
+2. **Human reads signals** periodically (or a downstream agent does)
+3. **Patterns get fed back** — update the skill, fix the docs, adjust the agent
+
+That's the whole system. The loop compounds: better skills produce cleaner
+signals, cleaner signals produce better skills.
 
 ---
 
