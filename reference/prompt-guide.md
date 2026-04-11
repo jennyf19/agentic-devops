@@ -108,10 +108,10 @@ Once you're building, these prompts help:
 
 ---
 
-## After the Conference
+## After Your First Skill
 
-The skill you build today is real. It works. You can run it tomorrow against your repos.
+The skill you build is real. It works. You can run it today against your repos.
 
 When you find edge cases in production, update the skill. It's markdown — you edit it and the next run picks up the change. No redeployment. No pipeline. Just better prose.
 
-And if you build something good — share it. The skill you write for one CVE might save hundreds of developers the same work.
+And if you build something good — [share it](../CONTRIBUTING.md). The skill you write for one CVE might save hundreds of developers the same work.
