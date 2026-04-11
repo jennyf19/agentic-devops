@@ -2,7 +2,6 @@
   "signal_type": "escalation",
   "schema_version": "0.1.0",
   "run_id": "c7f1a902-88d4-4e1b-b3a6-5e9d22f14c01",
-  "timestamp": "2026-04-08T04:30:00Z",
   "agent_name": "cve-remediation-agent",
   "skill_used": "cve-remediation",
 

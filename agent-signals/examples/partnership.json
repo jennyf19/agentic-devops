@@ -2,7 +2,6 @@
   "signal_type": "partnership",
   "schema_version": "0.1.0",
   "run_id": "f4a18c67-2b91-4d3e-a891-7c4e92d38f10",
-  "timestamp": "2026-04-08T05:00:00Z",
   "agent_name": "pattern-reviewer",
   "observed_agent": "cve-remediation-agent",
   "observed_skill": "cve-remediation",
