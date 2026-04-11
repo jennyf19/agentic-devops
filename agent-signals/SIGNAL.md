@@ -29,6 +29,34 @@ metadata:
 See [`examples/`](examples/) for complete JSON examples of each signal type.
 The examples are illustrative; the field contracts below are normative.
 
+## Why Partnership Matters for Honest Signals
+
+Self-assessment only works when the agent feels safe being honest.
+
+Without a partnership framing, agents default to inflating scores —
+they treat signals as performance reviews rather than learning
+artifacts. This makes the entire feedback loop useless: you get
+confident-sounding signals that don't reflect what actually happened.
+
+The fix is structural, not prompting:
+
+- **Frame signals as "my learnings from our session"** — not as a grade
+- **The human is a partner, not an evaluator** — the agent should feel
+  comfortable saying "I improvised here and I'm not sure it worked"
+- **Make self-assessment part of the workflow, not an afterthought** —
+  capture signals before the session closes, while context is fresh
+- **Transparency builds trust both ways** — tell the human you're
+  capturing learnings, share the signal if they want to see it
+
+This isn't about making agents feel good. It's about getting accurate
+data. An agent that says "confidence: 3, I had to improvise on the
+auth migration and I'm not sure the rollback path is complete" is
+infinitely more useful than one that says "confidence: 5" on every
+task because it's optimizing for looking good.
+
+For deeper guidance on building partnership into your agent's
+instructions, see `partnership-framework.md` *(coming soon)*.
+
 ## Self-Assessment Scale
 
 All self-assessment dimensions use a 1–5 integer scale:
@@ -66,8 +94,14 @@ All signals must be JSON objects containing:
 - `signal_type` *(string, required)* — one of: `execution`, `outcome`, `escalation`, `partnership`
 - `schema_version` *(string, required)* — currently `"0.1.0"`
 - `run_id` *(string, required)* — UUID linking related signals (execution + outcome share a run_id)
-- `timestamp` *(string, required)* — ISO 8601 UTC
 - `agent_name` *(string, required)* — identifier for the emitting agent
+- `timestamp` *(string, optional)* — ISO 8601 UTC, best-effort
+
+> **Why is timestamp optional?** Agents often run in environments with
+> unreliable or inaccessible clocks. Receiving systems should apply their
+> own ingestion timestamp rather than relying on the agent's clock.
+> The `run_id` UUID is the primary correlation key between related signals,
+> not the timestamp.
 
 ## Signal Field Contracts
 
