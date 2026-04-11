@@ -233,6 +233,8 @@ The first signal tells you nothing.
 ## Further Reading
 
 - [The Interaction Changes Everything](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/) — the 8-element co-creative partnership framework (Microsoft Engineering Blog)
+- [How Microsoft uses Agentic AI to accelerate software delivery](https://www.youtube.com/watch?v=jvzPLZQQD3A) — Microsoft Reactor talk on partnership-first agent patterns
+- [The Wow Signal on Substack](https://jenny424241.substack.com) — follow for ongoing experiments in human-AI co-creation
 - [Agent Signals Protocol](README.md) — the full protocol specification
 - [SIGNAL.md](SIGNAL.md) — signal types, field contracts, trust equation
 - [Quick Start](quickstart.md) — emit your first signal in 5 minutes
