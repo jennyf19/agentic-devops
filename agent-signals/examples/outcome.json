@@ -2,7 +2,6 @@
   "signal_type": "outcome",
   "schema_version": "0.1.0",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
-  "timestamp": "2026-04-08T03:15:00Z",
   "agent_name": "quality-evaluator",
 
   "quality_rating": 4,
