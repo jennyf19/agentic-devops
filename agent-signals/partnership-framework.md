@@ -40,7 +40,7 @@ response.
 ## Three Levels of Agent Interaction
 
 | Level | Pattern | What signals look like |
-|-------|---------|----------------------|
+|---|---|---|
 | **Tool** | Command → Execute | Confidence: 5, patterns: empty. Useless data. |
 | **Partner** | Context → Collaborate | Confidence: 3, what_was_hard: populated, skill_gap: identified. Real data. |
 | **Co-creator** | Invitation → Emergent judgment | Agent flags issues you didn't ask about, escalates proactively, self-assessment reflects genuine uncertainty. Rich data. |
@@ -185,7 +185,12 @@ AI's capability. It was in the interaction structure.
 
 ## What Honest Signals Look Like
 
-**Tool-mode signal:**
+These excerpts show only the `self_assessment` and `patterns` fields to
+highlight the difference. A complete signal also includes `signal_type`,
+`schema_version`, `run_id`, and other common fields — see
+[SIGNAL.md](SIGNAL.md) for the full field contracts.
+
+**Tool-mode signal (excerpt):**
 ```json
 {
   "self_assessment": {
@@ -197,7 +202,7 @@ AI's capability. It was in the interaction structure.
 }
 ```
 
-**Partnership-mode signal:**
+**Partnership-mode signal (excerpt):**
 ```json
 {
   "self_assessment": {
@@ -237,4 +242,4 @@ The first signal tells you nothing.
 - [The Wow Signal on Substack](https://jenny424241.substack.com) — follow for ongoing experiments in human-AI co-creation
 - [Agent Signals Protocol](README.md) — the full protocol specification
 - [SIGNAL.md](SIGNAL.md) — signal types, field contracts, trust equation
-- [Quick Start](quickstart.md) — emit your first signal in 5 minutes
+- [Quick Start](quickstart.md) — emit your first signal in 5 minutes (added in v0.2.0)
