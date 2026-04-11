@@ -138,7 +138,7 @@ what the agent learned. The system compounds.
 
 - [The Interaction Changes Everything](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/) — Engineering at Microsoft
 - [How Microsoft uses Agentic AI to accelerate software delivery](https://www.youtube.com/watch?v=jvzPLZQQD3A) — Microsoft Reactor
-- [Agentic DevOps: From CVE to Agent Skill](https://ignite.microsoft.com/en-US/sessions/BRK115) — Microsoft Ignite 2025
+- [Inside Microsoft's AI transformation across the software lifecycle](https://ignite.microsoft.com/en-US/sessions/BRK115) — Microsoft Ignite 2025
 
 ### Writing
 
