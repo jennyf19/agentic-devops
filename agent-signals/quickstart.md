@@ -46,7 +46,10 @@ After the agent finishes, emit the signal. Fill in the `self_assessment` scores 
 ## 4. Read the signal
 
 ```bash
-cat .signals/*.json | python -m json.tool
+for file in .signals/*.json; do
+  echo "==> $file"
+  python -m json.tool "$file"
+done
 ```
 
 Look at `what_was_hard` and `skill_gap`. That's what your agent learned. That's what makes the next run better.
