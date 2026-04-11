@@ -8,13 +8,11 @@ No philosophy. No protocol deep-dive. Just get a signal out of your agent.
 
 ```python
 import json, os, uuid
-from datetime import datetime, timezone
 
 signal = {
     "signal_type": "execution",
     "schema_version": "0.1.0",
     "run_id": str(uuid.uuid4()),
-    "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     "agent_name": "my-agent",
     "skill_used": "my-skill",
     "self_assessment": {
