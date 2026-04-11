@@ -19,8 +19,12 @@ All notable changes to Agentic DevOps will be documented here.
 
 ### Added
 - Initial release
-- Two skills: build-cve-skill.md, build-agent-first-advisory.md
-- Agent Signals protocol with execution, outcome, escalation, and partnership signal types
-- Worked example: XStream CVE remediation (Java/Maven)
-- Reference docs: CVE skill template, agent-first advisory concept, prompt guide
-- GitHub Pages with minimal theme
+- skills/build-cve-skill.md — how to build a CVE remediation skill
+- skills/build-agent-first-advisory.md — agent-first advisory concept
+- agent-signals/ — Agent Signals protocol with execution, outcome, escalation, and partnership signal types
+- agent-signals/examples/ — JSON examples for all four signal types
+- examples/remediate-xstream-cve.md — XStream CVE remediation worked example (Java/Maven)
+- reference/prompt-guide.md — prompt engineering guide for agent skills
+- reference/cve-skill-template.md — CVE skill template
+- reference/agent-first-advisory.md — agent-first advisory reference
+- _config.yml — GitHub Pages with minimal theme
