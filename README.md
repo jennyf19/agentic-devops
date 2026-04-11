@@ -1,10 +1,25 @@
 # Agentic DevOps
 
+**Partnership-first patterns for scaling with AI agents.**
+
 > What persists when the model changes, the tools evolve, and the platform shifts?
 > The feedback loop. The institutional memory. The partnership between humans and agents.
 
 This repo is for teams building with AI agents — not as automation, but as
-collaborators. Three paths depending on where you are.
+collaborators.
+
+---
+
+## Start Here: The Partnership Framework
+
+Before loading a skill or emitting a signal, read
+**[Partnership Framework](agent-signals/partnership-framework.md)**.
+
+Agents produce useful signals only when the interaction structure makes
+honesty safe. Without partnership framing, self-assessment becomes
+performance — confidence is always 5, `what_was_hard` is empty, and
+the feedback loop produces noise. The partnership framework shows you
+how to fix that.
 
 ---
 
@@ -98,6 +113,7 @@ what the agent learned. The system compounds.
 
 | File | What |
 |------|------|
+| [Partnership Framework](agent-signals/partnership-framework.md) | **Start here** — why signals require partnership framing |
 | [Agent Signals](agent-signals/) | The protocol for agent self-assessment, trust measurement, and self-improving skills |
 
 ### Examples — see what the output looks like
@@ -121,8 +137,12 @@ what the agent learned. The system compounds.
 ### Talks
 
 - [The Interaction Changes Everything](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/) — Engineering at Microsoft
+- [How Microsoft uses Agentic AI to accelerate software delivery](https://www.youtube.com/watch?v=jvzPLZQQD3A) — Microsoft Reactor
 - [Agentic DevOps: From CVE to Agent Skill](https://ignite.microsoft.com/en-US/sessions/BRK115) — Microsoft Ignite 2025
-- [Building Agent Skills for DevOps](https://www.youtube.com/watch?v=jvzPLZQQD3A) — Microsoft Reactor
+
+### Writing
+
+- [The Wow Signal](https://jenny424241.substack.com) — follow on Substack for ongoing experiments in human-AI co-creation
 
 ### Research
 
