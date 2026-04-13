@@ -66,7 +66,7 @@ Together they close the loop.
 
 ## Getting Started
 
-Install [Ember](https://github.com/github/awesome-copilot) or use any agent:
+Install [Ember](https://github.com/github/awesome-copilot/blob/main/agents/ember.agent.md) or use any agent:
 
 ```
 copilot plugin install ember@awesome-copilot
@@ -74,6 +74,10 @@ copilot plugin install ember@awesome-copilot
 
 Or just point your agent at one of the skill files above. They're markdown —
 they work anywhere.
+
+### Why use Ember?
+
+Ember has the partnership framework built it.
 
 ---
 
