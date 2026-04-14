@@ -37,8 +37,17 @@ signals (see [SIGNAL.md](SIGNAL.md)):
 | `tsg_gap` | Missing or inadequate guidance in documentation |
 | `recurring_pattern` | Patterns the producing agent has seen before |
 | `improvisation` | Novel approaches not covered by existing skills |
-| `environment_blockers` | External issues (APIs, permissions, infra) |
 | `what_worked` | Effective techniques worth preserving |
+
+The six dimensions above are defined in the `execution.patterns` contract
+in [SIGNAL.md](SIGNAL.md).
+
+**Extension dimension** (not in the base schema — add to your signal schema
+if your agents encounter infrastructure blockers):
+
+| Dimension | What It Tells the Consumer |
+|-----------|---------------------------|
+| `environment_blockers` | External issues (APIs, permissions, infra) |
 
 ### 1.2 Secondary Input: Self-Assessment Scores
 
@@ -83,7 +92,8 @@ Key distinctions:
 
 ```
 For each pattern dimension d in [tsg_gap, skill_gap, what_was_hard,
-    environment_blockers, improvisation, recurring_pattern]:
+    improvisation, recurring_pattern]
+    (plus environment_blockers if your schema includes it):
 
   1. COLLECT all non-empty values of d from signals in the time window
   2. CLUSTER by semantic similarity (LLM-assisted grouping)
@@ -93,6 +103,11 @@ For each pattern dimension d in [tsg_gap, skill_gap, what_was_hard,
      with status "acknowledged" or "in-progress" (§5)
   6. EMIT the remaining clusters as detected patterns
 ```
+
+**Note:** `what_worked` is excluded from threshold-based detection. It captures
+positive techniques, not problems to solve. The consuming agent SHOULD still
+read `what_worked` values to preserve effective patterns in reports and to
+inform skill updates, but it does not trigger remediation actions.
 
 ### 2.3 Thresholds
 
@@ -118,10 +133,12 @@ Per-dimension thresholds (apply within the chosen time window):
 |-----------|-----------|-----------|
 | `tsg_gap` | 3 occurrences | Documentation gaps block agents repeatedly; 3 is enough signal |
 | `skill_gap` | 3 occurrences | Capability gaps compound quickly |
-| `environment_blockers` | 3 occurrences | Infra issues affect many agents simultaneously |
 | `what_was_hard` | 5 occurrences | Higher threshold — friction is common, systemic friction less so |
 | `improvisation` | 3 occurrences | If 3 agents independently invent the same workaround, it should be a skill |
 | `recurring_pattern` | 2 occurrences | Agents flagging recurrence is already a strong signal |
+
+If your schema includes `environment_blockers`, use threshold **3 occurrences**
+(infra issues affect many agents simultaneously).
 
 At high volume, the consuming agent's scheduled run frequency should
 match the window — run every few hours, not once daily. The loop
@@ -135,10 +152,19 @@ HIGH regardless of per-skill count.
 
 | Severity | Criteria |
 |----------|----------|
-| **CRITICAL** | Confidence ≤ 3 in 5+ signals for the same skill within the time window, OR escalation rate > 50% for any skill |
+| **CRITICAL** | Confidence ≤ 3 in 5+ signals for the same skill within the time window, OR escalation rate > 50% for any skill (see below) |
 | **HIGH** | Pattern crosses threshold AND affects multiple skills, OR confidence declining > 1.0 points between consecutive windows |
 | **MEDIUM** | Pattern crosses threshold within a single skill |
 | **LOW** | Pattern approaching threshold (count = threshold − 1), flagged for monitoring |
+
+**Escalation rate** is defined per skill, within the current time window:
+
+```
+escalation_rate = (signals with escalation for skill S in window) / (total signals for skill S in window)
+```
+
+"Escalation rate > 50%" means strictly more than half of all signals for a
+single skill in the current window explicitly requested escalation.
 
 ---
 
@@ -185,10 +211,13 @@ MUST take exactly these actions, in order:
 |-----------|--------|--------|
 | `tsg_gap` | **Open a PR** | Draft the missing documentation section. Include the verbatim `tsg_gap` text from signals as context. Target the skill's documentation. |
 | `skill_gap` | **Open an issue** | Document the missing capability with evidence (signal count, affected skills, example scenarios). Label as `skill-gap`. |
-| `environment_blockers` | **Open an issue** | Document the infrastructure blocker with affected skills and frequency. Label as `infra-blocker`. Route to the platform team. |
 | `what_was_hard` | **Add to report** | Include in the daily synthesis with clustering context. If the friction maps to a specific code path, open a PR to improve it. |
 | `improvisation` | **Open a PR** | If 3+ agents independently invented the same workaround, propose adding it to the skill as a documented approach. |
 | `recurring_pattern` | **Add to report** | Flag in synthesis. If the pattern suggests a skill update, open a PR. |
+
+If your schema includes `environment_blockers`: **Open an issue.** Document the
+infrastructure blocker with affected skills and frequency. Label as `infra-blocker`.
+Route to the platform team.
 
 ### 3.3 PR Requirements
 
@@ -245,7 +274,7 @@ fields from the base schema are preserved; `action_taken` and
         "pattern": "Multi-module rollback documentation missing",
         "dimension": "tsg_gap",
         "frequency": 4,
-        "severity": "medium",
+        "severity": "MEDIUM",
         "current_skill_coverage": "none"
       }
     ]
@@ -262,7 +291,7 @@ fields from the base schema are preserved; `action_taken` and
   ],
 
   "action_taken": "pr_opened",
-  "action_ref": "https://github.com/org/repo/pull/123",
+  "action_ref": "pr-123",
   "registry_entry_id": "pat-2026-04-14-001",
 
   "self_assessment": {
@@ -300,8 +329,8 @@ entry_id: pat-2026-04-14-001
 detected_at: 2026-04-14T14:00:00Z
 dimension: tsg_gap
 pattern_summary: "Multi-module rollback docs missing from remediation skill"
-status: detected | acknowledged | in-progress | resolved | wont-fix
-severity: CRITICAL | HIGH | MEDIUM | LOW
+status: detected  # one of: detected, acknowledged, in-progress, resolved, wont-fix
+severity: MEDIUM  # one of: CRITICAL, HIGH, MEDIUM, LOW
 evidence:
   signal_count: 4
   time_window: 7d
@@ -314,7 +343,7 @@ evidence:
   first_seen: 2026-04-11T09:00:00Z
   last_seen: 2026-04-14T08:30:00Z
 action_taken: pr_opened
-action_ref: "https://github.com/org/repo/pull/123"
+action_ref: "pr-123"
 resolution:
   resolved_at: null
   resolved_by: null
@@ -422,7 +451,7 @@ For teams adopting this pattern with their own signal-consuming agent:
 - [ ] Agent has read access to the signal store
 - [ ] Agent has the [signal schema](SIGNAL.md) loaded
 - [ ] Agent has a scheduled task that runs at least daily
-- [ ] Pattern detection covers all seven dimensions (§2.1)
+- [ ] Pattern detection covers all threshold dimensions (§2.1, §2.2)
 - [ ] Thresholds are configured (§2.3) — start with the defaults
 - [ ] Known-patterns registry is initialized (§5)
 - [ ] Partnership signals are emitted on every detection (§4)
