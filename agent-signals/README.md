@@ -390,9 +390,14 @@ loop is:
 That's the whole system. The loop compounds: better skills produce cleaner
 signals, cleaner signals produce better skills.
 
+Ready to build the automated version? See
+[**Closing the Loop**](closing-the-loop.md) — the full spec for a
+signal-consuming agent that detects patterns and opens PRs to improve skills.
+
 ---
 
 ## See Also
 
+- **[Closing the Loop](closing-the-loop.md)** — The signal-consuming agent pattern: how a dedicated agent reads signals, detects recurring patterns, and opens PRs to improve skills
 - **[Agent Skills](https://agentskills.io)** — The input half of the loop (Anthropic's protocol)
 - **[The Interaction Changes Everything](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/)** — The research behind treating agents as collaborators
