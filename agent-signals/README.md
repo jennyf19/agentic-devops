@@ -284,6 +284,75 @@ remediation sessions:
 
 ---
 
+## Two Capture Paths, Two Reliability Profiles
+
+Here's something we learned the hard way, and it shaped the whole protocol:
+**you will lose execution signals, and that's the reason outcome signals exist.**
+
+An execution signal is a self-report. It only gets captured if the agent is
+still running, the session is still open, and the emit step actually fires
+before the developer closes the terminal. In practice, a lot of them never
+make it out. In our own production system, we captured thousands of execution
+signals — but far fewer than the number of tasks the agents actually completed.
+The rest were lost to closed sessions and interrupted runs.
+
+That loss is not a bug you can fully engineer away. It's the nature of
+self-assessment: it depends on the speaker being present and willing to speak.
+
+The outcome signal is different. It doesn't depend on the agent remembering
+anything. The work product — the PR, the commit, the change — is *durable*.
+It exists in the system whether or not the CLI stayed open. So an independent
+evaluator can grade it later, on its own schedule, with no dependency on the
+original session.
+
+This is the same distinction that shows up everywhere in trustworthy AI:
+
+- **Honesty** is a property of the *speaker*. It's unverifiable from outside,
+  and — as we learned — it can be lost entirely if the speaker never gets to
+  report.
+- **Transparency** is a property of the *system*. The artifact is there,
+  checkable by anyone with access, regardless of what the agent said or
+  whether it said anything at all.
+
+You need both signal types precisely *because* self-report is fragile. The
+execution signal tells you what the agent believed, when you can get it. The
+outcome signal is the durable ground truth you can always recover. The gap
+between them is the calibration measurement — and it's trustworthy *because*
+one leg of it doesn't depend on the agent's cooperation.
+
+**Design implication:** don't build your trust story on execution signals
+alone. Anchor it to something durable. Treat execution signals as valuable-
+but-lossy self-report, and treat outcome signals as the verifiable backbone.
+A system that can only self-report is a system you're trusting on faith. A
+system where the outcome is independently checkable is a system you can
+actually verify — even on the runs where the agent never got to speak.
+
+## Related Industry Direction
+
+Frontier model providers are shipping architectures that separate capability
+from verification.
+
+Anthropic's Claude Fable 5 and Mythos 5 (2026) expose the same base model
+through two tiers: a generally-available tier (Fable 5) with external safety
+classifiers that intercept high-risk requests and route them to a fallback
+model, and a restricted tier (Mythos 5) without those classifiers, available
+only to vetted partners. The two tiers differ not in capability but in the
+safeguards and vetting applied around access.
+
+We read this as consistent with the premise behind Agent Signals: capability
+alone isn't the thing to manage — verification is. Access-tiering addresses
+*who* operates with which safeguards. Signal calibration addresses a different,
+complementary question: *whether an agent's self-reported reliability holds up
+against independent evaluation, over time.* The calibration gap between what an
+agent claims about its own work and what an independent evaluation confirms is
+a number you can track run over run.
+
+The through-line with the research cited earlier — OpenAI on honest
+self-report, Anthropic on scalable oversight, Microsoft on collaboration — is
+that systems designed for verification tend to outperform systems that ask you
+to take reliability on faith. Agent Signals is a measurement layer for that
+kind of verification.
+
 ## Getting Started
 
 ### 1. Add a signals directory to your project
