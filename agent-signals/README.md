@@ -332,12 +332,11 @@ actually verify — even on the runs where the agent never got to speak.
 Frontier model providers are shipping architectures that separate capability
 from verification.
 
-Anthropic's Claude Fable 5 and Mythos 5 (2026) expose the same base model
-through two tiers: a generally-available tier (Fable 5) with external safety
-classifiers that intercept high-risk requests and route them to a fallback
-model, and a restricted tier (Mythos 5) without those classifiers, available
-only to vetted partners. The two tiers differ not in capability but in the
-safeguards and vetting applied around access.
+Anthropic's recent Claude Fable 5 and Mythos 5 release ships the same
+underlying model through two different access tiers: a generally-available
+tier with additional safeguards around high-risk requests, and a restricted
+tier available only to vetted partners. Access is gated by verification and
+vetting, not by raw capability.
 
 We read this as consistent with the premise behind Agent Signals: capability
 alone isn't the thing to manage — verification is. Access-tiering addresses
