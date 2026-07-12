@@ -62,6 +62,15 @@ Agent Signals is an open protocol for capturing agent reasoning,
 self-assessment, and outcomes. Skills are the input. Signals are the output.
 Together they close the loop.
 
+### "I'm the switchboard between too many agent tabs"
+
+Read **[The Workshop](workshop/)** — run a room of agents on one shared bench,
+each with its own memory, so you direct a team instead of relaying between them.
+
+> Models change. What persists is the room: the shared work, the memory, and
+> the way a desk stands. Every desk emits signals — the workshop is where the
+> feedback loop runs on real work.
+
 ---
 
 ## Getting Started
@@ -119,6 +128,12 @@ what the agent learned. The system compounds.
 |------|------|
 | [Partnership Framework](agent-signals/partnership-framework.md) | **Start here** — why signals require partnership framing |
 | [Agent Signals](agent-signals/) | The protocol for agent self-assessment, trust measurement, and self-improving skills |
+
+### The Workshop — run a room of agents
+
+| File | What |
+|------|------|
+| [The Workshop](workshop/) | Run several long-running agents (desks) on one shared bench — with memory, signals, and an operator dashboard |
 
 ### Examples — see what the output looks like
 
