@@ -1,8 +1,10 @@
 # The Workshop
 
-> Run a room of agents, not one at a time. What persists when the model changes
-> isn't the agent — it's the room: the shared work, the memory, and the way a
-> desk stands.
+> Stop being the switchboard between your AI agents — direct a team. What
+> persists when the model changes isn't the agent; it's the room: the shared
+> work, the memory, and the way a desk stands.
+
+**Open source · [github.com/jennyf19/the-workshop](https://github.com/jennyf19/the-workshop)** — a .NET 10 dashboard over your local Copilot CLI sessions. Run `Start.bat` and you have a board.
 
 ---
 
@@ -147,11 +149,13 @@ Skills (input)  →  A room of desks does the work  →  Signals (output)
 
 ---
 
-## Status
+## Get it
 
-The workshop is **incubating**. The idea — a room of long-running agents with
-memory, signals, and an operator who directs instead of relays — is what this
-page is for; the app ships when the story is ready.
+The workshop is **open source**. The app, the docs, and a 2-minute
+getting-started walkthrough live at
+[**github.com/jennyf19/the-workshop**](https://github.com/jennyf19/the-workshop).
+It builds and runs today — a .NET 10 Blazor dashboard over your local Copilot
+CLI sessions; run `Start.bat` and you have a board.
 
 Follow along: [**The Wow Signal**](https://jenny424241.substack.com) — ongoing
 experiments in human-AI co-creation.
