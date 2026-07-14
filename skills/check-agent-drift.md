@@ -138,9 +138,10 @@ Drift**, regardless of total. A skill can be lean, grounded, and model-agnostic
 and still be unsafe if it hands a strong model irreversible actions with no
 checkpoint. Weighting alone shouldn't let a high D1/D3/D5 score paper over that.
 
-**Rank the fixes** by weighted gap: `(4 − raw) × weight`, largest first. That
-puts the highest-leverage change at the top — usually a safety or grounding gap,
-not a cosmetic one. Recommend **exactly five** next steps.
+**Rank the fixes** by weighted gap — the weighted points a dimension leaves on
+the table: `(4 − raw) × weight / 4`, largest first. That puts the
+highest-leverage change at the top — usually a safety or grounding gap, not a
+cosmetic one. Recommend **exactly five** next steps.
 
 ## The Drift Report
 
@@ -168,8 +169,8 @@ weightedTotal: 68.75 / 100  →  Moderate Drift
 Top 5, by weighted gap:
 1. D2 (gap 12.5): add an approval gate before push-to-main; make it reversible.
 2. D5 (gap 10):   replace the hardcoded context size / model name with capability checks.
-3. D1 (gap 3.75): collapse the keystroke-level steps into intent + constraints.
-4. D3 (gap 5):    add a "verify before asserting" step for external facts.
+3. D3 (gap 5):    add a "verify before asserting" step for external facts.
+4. D1 (gap 3.75): collapse the keystroke-level steps into intent + constraints.
 5. D4 (gap 0):    already frontier-aligned — keep the human-decides framing.
 ```
 
