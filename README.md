@@ -50,6 +50,18 @@ The skill teaches the agent how to help you write documentation that IS
 the fix — so developers using your library don't need a separate skill
 at all.
 
+### "I inherited a skill and I'm not sure it's still current"
+
+Load **[check-agent-drift.md](skills/check-agent-drift.md)** and say:
+
+> *"Here's a skill I own. Check it for drift — where is it hand-holding a
+> model that's outgrown the hand-holding, and where does it let the agent act
+> without a checkpoint it now needs?"*
+
+The skill walks the agent through an evidence-based audit across five
+dimensions, scores the drift, and ranks the highest-leverage fixes — model-
+agnostic, so it still works the next time the frontier moves.
+
 ### "I want my agents to learn from every session"
 
 Read **[Agent Signals](agent-signals/)** — the feedback loop that makes
@@ -121,6 +133,7 @@ what the agent learned. The system compounds.
 |------|------|-----|
 | [build-cve-skill.md](skills/build-cve-skill.md) | Build a CVE remediation skill | Devs with CVEs to fix |
 | [build-agent-first-advisory.md](skills/build-agent-first-advisory.md) | Write an agent-executable advisory | Library maintainers, security teams |
+| [check-agent-drift.md](skills/check-agent-drift.md) | Audit a skill or plugin for model-version drift | Skill authors, platform teams |
 
 ### Agent Signals — the feedback loop
 
