@@ -127,9 +127,9 @@ Optional fields:
   Each recommendation may carry `validation_status` *(string)* — one of
   `outcome_validated` or `self_report_only` — declaring whether its `evidence` is
   backed by independent `outcome` signals or rests only on the reviewed agents'
-  `execution` self-reports. Consumers must weight `outcome_validated` recommendations
-  above `self_report_only` ones, and must not feed a `self_report_only` recommendation
-  forward as established fact (see [Consuming Signals](#consuming-signals)).
+  `execution` self-reports. Consumers must prefer `outcome_validated` recommendations over
+  `self_report_only` ones when ranking or selecting recommendations for reinjection, and must not treat
+  `self_report_only` recommendations as established fact (see [Consuming Signals](#consuming-signals)).
 - `self_assessment` *(object)* — the reviewing agent's confidence in its own analysis
 
 ## Consuming Signals
