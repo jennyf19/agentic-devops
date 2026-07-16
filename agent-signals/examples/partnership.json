@@ -47,6 +47,6 @@
   "self_assessment": {
     "confidence": 4,
     "completeness": 3,
-    "note": "Reviewed execution signals only, so every recommendation here is marked validation_status: self_report_only. Outcome signals would let a reviewer promote the validated ones to outcome_validated."
+    "note": "Reviewed execution signals only, so every recommendation here is marked `\"validation_status\": \"self_report_only\"`. Outcome signals would let a reviewer promote the validated ones to `\"validation_status\": \"outcome_validated\"`."
   }
 }
