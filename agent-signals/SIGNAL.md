@@ -59,6 +59,14 @@ Higher is better — same direction as the self-assessment scale. The gap
 between what an agent thinks happened and what actually happened is where
 the learning lives.
 
+**Known limitation — the metric can be gamed.** Once calibration is scored,
+an agent (or a fine-tuned policy) can keep the gap small by hedging: report
+middling confidence everywhere and calibration looks healthy without the
+self-reports getting more honest. A flat confidence distribution with a good
+calibration score is a tell, not a pass — track the *spread* of confidence
+alongside the gap. This is an open problem, not a solved one; consumers of
+calibration scores should know it exists.
+
 ## Common Fields
 
 All signals must be JSON objects containing:
@@ -158,6 +166,13 @@ Three rules govern consumption:
    `partnership` contract) so a consumer can weight `outcome_validated` evidence
    above `self_report_only` evidence. Never promote a `self_report_only` claim to
    established fact when feeding it back.
+
+One role is exempt by design: the **synthesizer** — whatever agent or job
+produces the `partnership` signal — must read the raw signal backlog, because
+that is its function. It runs out-of-band, with a dedicated context budget,
+separate from any working session; only its distilled output re-enters a
+working agent's window. The rules above bind working agents, not the
+out-of-band synthesis pass.
 
 Review-to-action closes the loop for humans and skills; disciplined consumption
 closes it back into the agent's own context. Emission plus disciplined
