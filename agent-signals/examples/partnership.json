@@ -31,6 +31,7 @@
       "target": "cve-remediation",
       "description": "Add multi-module dependency resolution strategy with explicit ordering.",
       "evidence": "4 of 12 sessions hit this gap. All 4 agents improvised. 2 of 4 improvisations needed rework.",
+      "validation_status": "self_report_only",
       "priority": "high"
     },
     {
@@ -38,6 +39,7 @@
       "target": "cve-remediation",
       "description": "Add known_pattern entry for transitive conflicts so agents stop rediscovering the workaround.",
       "evidence": "Same improvisation reinvented 3 times independently.",
+      "validation_status": "self_report_only",
       "priority": "medium"
     }
   ],
@@ -45,6 +47,6 @@
   "self_assessment": {
     "confidence": 4,
     "completeness": 3,
-    "note": "Reviewed execution signals only. Would benefit from outcome signals to validate whether the improvisations actually worked."
+    "note": "Reviewed execution signals only, so every recommendation here is marked validation_status: self_report_only. Outcome signals would let a reviewer promote the validated ones to outcome_validated."
   }
 }

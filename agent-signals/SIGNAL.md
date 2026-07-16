@@ -123,8 +123,45 @@ Required fields:
 Optional fields:
 
 - `observed_skill` *(string)*
-- `recommendations` *(array of objects)* — suggested skill or process improvements
+- `recommendations` *(array of objects)* — suggested skill or process improvements.
+  Each recommendation may carry `validation_status` *(string)* — one of
+  `outcome_validated` or `self_report_only` — declaring whether its `evidence` is
+  backed by independent `outcome` signals or rests only on the reviewed agents'
+  `execution` self-reports. Consumers must weight `outcome_validated` recommendations
+  above `self_report_only` ones, and must not feed a `self_report_only` recommendation
+  forward as established fact (see [Consuming Signals](#consuming-signals)).
 - `self_assessment` *(object)* — the reviewing agent's confidence in its own analysis
+
+## Consuming Signals
+
+The field contracts above define *emission* — what an agent writes out. This
+section defines *consumption* — what re-enters an agent's context window on the
+next run. The loop only compounds if the read side is disciplined: an unbounded
+backlog of raw signals fed back into context degrades the very reasoning it was
+meant to improve.
+
+Three rules govern consumption:
+
+1. **Synthesize, don't replay.** Raw `execution` signals are high-volume and
+   lossy — a per-task self-report. What should re-enter an agent's window is the
+   synthesized `partnership` signal: the reviewed, deduplicated distillation of
+   many signals into recurring patterns and recommendations. The partnership
+   signal — not the raw execution backlog — is the consumption primitive.
+
+2. **Bound and rank.** When prior signal context is injected, it must be
+   bounded. Rank by recency, frequency, and severity; cap the volume; drop stale
+   entries. A consumer must not inject the full signal history.
+
+3. **Don't feed self-report forward as fact.** Execution self-assessment is
+   valuable but lossy, and it stays unverified until an independent `outcome`
+   signal confirms it. Recommendations carry `validation_status` (see the
+   `partnership` contract) so a consumer can weight `outcome_validated` evidence
+   above `self_report_only` evidence. Never promote a `self_report_only` claim to
+   established fact when feeding it back.
+
+Review-to-action closes the loop for humans and skills; disciplined consumption
+closes it back into the agent's own context. Emission plus disciplined
+consumption is what makes the loop compound instead of decay.
 
 ## Privacy
 
