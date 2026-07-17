@@ -2,6 +2,14 @@
 
 All notable changes to Agentic DevOps will be documented here.
 
+## [0.3.0] — 2026-04-14
+
+### Added
+- agent-signals/closing-the-loop.md — Signal-consuming agent pattern specification: how a dedicated agent reads accumulated signals, detects recurring patterns, and opens PRs to improve skills
+
+### Changed
+- agent-signals/README.md — Added "Closing the Loop" to See Also section and linked from step 4
+
 ## [0.2.0] — 2026-04-11
 
 ### Added
