@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{% if page.title %}<title>{{ page.title }} · {{ site.title }}</title>{% else %}<title>{{ site.title }}</title>{% endif %}
+{% if page.description or site.description %}<meta name="description" content="{{ page.description | default: site.description }}" />{% endif %}
+<meta name="theme-color" content="#faf9f6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
+<script>
+  (function () {
+    try {
+      var s = localStorage.getItem("theme");
+      var t = s || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) { document.documentElement.setAttribute("data-theme", "dark"); }
+  })();
+</script>
+<link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav-inner">
+      <a class="brand" href="{{ '/' | relative_url }}"><span class="spark" aria-hidden="true"></span> Agentic DevOps</a>
+      <div class="nav-links">
+        <a href="{{ '/' | relative_url }}" class="hide-sm">Home</a>
+        <a href="{{ '/agent-signals/' | relative_url }}" class="hide-sm">Agent Signals</a>
+        <a href="{{ '/workshop/' | relative_url }}" class="hide-sm">The Workshop</a>
+        <a class="nav-gh" href="https://github.com/jennyf19/agentic-devops" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+          <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.2 4.2l1.9 1.9M17.9 17.9l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.2 19.8l1.9-1.9M17.9 6.1l1.9-1.9"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.3 6.3 0 0 0 10.5 10.5z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main" class="doc">
+    <div class="wrap">
+      <article class="prose">
+        <a class="doc-back" href="{{ '/' | relative_url }}">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+          Agentic DevOps
+        </a>
+        {{ content }}
+      </article>
+    </div>
+  </main>
+
+  <footer class="site">
+    <div class="wrap foot-inner">
+      <div>
+        <a class="brand" href="{{ '/' | relative_url }}"><span class="spark" aria-hidden="true"></span> Agentic DevOps</a>
+        <p class="foot-meta" style="margin:10px 0 0">Maintained by <a href="https://github.com/jennyf19" target="_blank" rel="noopener">jennyf19</a> · MIT License</p>
+      </div>
+      <div class="foot-links">
+        <a href="https://github.com/jennyf19/agentic-devops" target="_blank" rel="noopener">GitHub</a>
+        <a href="{{ '/agent-signals/' | relative_url }}">Agent Signals</a>
+        <a href="{{ '/workshop/' | relative_url }}">The Workshop</a>
+        <a href="https://jenny424241.substack.com" target="_blank" rel="noopener">Substack</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById("themeToggle");
+      function setLabel() {
+        if (!toggle) return;
+        var cur = document.documentElement.getAttribute("data-theme");
+        toggle.setAttribute("aria-label", cur === "dark" ? "Switch to light theme" : "Switch to dark theme");
+      }
+      setLabel();
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          try { localStorage.setItem("theme", next); } catch (e) {}
+          setLabel();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
