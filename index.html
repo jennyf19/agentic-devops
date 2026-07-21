@@ -12,296 +12,45 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://jennyf19.github.io/agentic-devops/" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="theme-color" content="#0b0d12" />
-<style>
-  :root {
-    --bg: #0b0d12;
-    --bg-soft: #10131b;
-    --surface: #14181f;
-    --surface-2: #171c25;
-    --border: #232a37;
-    --border-soft: #1c222d;
-    --text: #e8ebf1;
-    --text-muted: #9aa4b4;
-    --text-faint: #6b7484;
-    --ember-1: #ff8a3d;
-    --ember-2: #ff5f6d;
-    --ember-glow: rgba(255, 122, 61, 0.35);
-    --accent: #ffb27a;
-    --radius: 16px;
-    --radius-sm: 10px;
-    --maxw: 1080px;
-    --ease: cubic-bezier(0.22, 1, 0.36, 1);
-    --shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.7);
-  }
-
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
-    color: var(--text);
-    background: var(--bg);
-    line-height: 1.6;
-    font-size: 17px;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    overflow-x: hidden;
-  }
-
-  a { color: var(--accent); text-decoration: none; transition: color 0.15s var(--ease); }
-  a:hover { color: #fff; }
-
-  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
-
-  code, kbd, pre {
-    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
-  }
-
-  /* ---------- Nav ---------- */
-  .nav {
-    position: sticky; top: 0; z-index: 50;
-    backdrop-filter: saturate(160%) blur(14px);
-    -webkit-backdrop-filter: saturate(160%) blur(14px);
-    background: rgba(11, 13, 18, 0.72);
-    border-bottom: 1px solid var(--border-soft);
-  }
-  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 62px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); font-size: 16px; }
-  .brand:hover { color: var(--text); }
-  .spark {
-    width: 22px; height: 22px; border-radius: 7px; flex: none;
-    background: linear-gradient(140deg, var(--ember-1), var(--ember-2));
-    box-shadow: 0 0 16px var(--ember-glow);
-    position: relative;
-  }
-  .spark::after {
-    content: ""; position: absolute; inset: 5px;
-    background: var(--bg); border-radius: 3px;
-    -webkit-mask: radial-gradient(circle at 50% 40%, transparent 0, transparent 3px, #000 3.5px); }
-  .nav-links { display: flex; align-items: center; gap: 6px; }
-  .nav-links a {
-    color: var(--text-muted); font-size: 14.5px; font-weight: 500;
-    padding: 8px 12px; border-radius: 8px; transition: all 0.15s var(--ease);
-  }
-  .nav-links a:hover { color: var(--text); background: var(--surface); }
-  .nav-gh {
-    display: inline-flex !important; align-items: center; gap: 7px;
-    border: 1px solid var(--border);
-  }
-  .nav-gh:hover { border-color: #333c4d; }
-  @media (max-width: 720px) { .nav-links a.hide-sm { display: none; } }
-
-  /* ---------- Hero ---------- */
-  .hero { position: relative; padding: 96px 0 72px; overflow: hidden; }
-  .hero::before {
-    content: ""; position: absolute; inset: -40% 0 auto 0; height: 720px; z-index: 0;
-    background:
-      radial-gradient(60% 55% at 70% 8%, rgba(255, 95, 109, 0.20), transparent 60%),
-      radial-gradient(50% 50% at 22% 0%, rgba(255, 138, 61, 0.22), transparent 62%),
-      radial-gradient(40% 40% at 50% 30%, rgba(124, 92, 255, 0.10), transparent 70%);
-    filter: blur(6px); pointer-events: none;
-  }
-  .hero::after {
-    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background-image: linear-gradient(var(--border-soft) 1px, transparent 1px), linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
-    background-size: 48px 48px;
-    -webkit-mask: radial-gradient(80% 60% at 50% 12%, #000, transparent 78%);
-    mask: radial-gradient(80% 60% at 50% 12%, #000, transparent 78%);
-    opacity: 0.5;
-  }
-  .hero .wrap { position: relative; z-index: 1; }
-  .eyebrow {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
-    color: var(--accent); background: rgba(255, 138, 61, 0.10);
-    border: 1px solid rgba(255, 138, 61, 0.25); border-radius: 999px;
-    padding: 6px 14px; margin-bottom: 26px;
-  }
-  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ember-1); box-shadow: 0 0 10px var(--ember-1); }
-  h1.title {
-    font-size: clamp(38px, 6.2vw, 66px); line-height: 1.04; letter-spacing: -0.03em;
-    font-weight: 800; margin: 0 0 22px; max-width: 15ch;
-  }
-  h1.title .grad {
-    background: linear-gradient(100deg, var(--ember-1), var(--ember-2) 60%, var(--accent));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .lede { font-size: clamp(17px, 2vw, 20px); color: var(--text-muted); max-width: 60ch; margin: 0 0 22px; }
-  .lede strong { color: var(--text); font-weight: 600; }
-
-  .persist {
-    border-left: 2px solid; border-image: linear-gradient(var(--ember-1), var(--ember-2)) 1;
-    padding: 4px 0 4px 20px; margin: 0 0 36px; max-width: 62ch;
-    color: var(--text-muted); font-size: 16px;
-  }
-  .persist b { color: var(--text); font-weight: 600; }
-
-  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
-  .cmd {
-    display: inline-flex; align-items: center; gap: 14px; max-width: 100%;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 12px 12px 18px; font-size: 15px;
-    box-shadow: var(--shadow);
-  }
-  .cmd code { color: var(--text); white-space: nowrap; min-width: 0; overflow-x: auto; scrollbar-width: none; }
-  .cmd code::-webkit-scrollbar { display: none; }
-  .cmd .prompt { color: var(--ember-1); font-weight: 700; margin-right: 2px; user-select: none; }
-  .copy-btn {
-    border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted);
-    border-radius: 8px; padding: 7px 10px; font-size: 12.5px; font-weight: 600; cursor: pointer;
-    display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s var(--ease);
-  }
-  .copy-btn:hover { color: var(--text); border-color: #333c4d; background: #1d2430; }
-  .copy-btn.copied { color: #7ee787; border-color: rgba(126, 231, 135, 0.4); }
-  .btn {
-    display: inline-flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px;
-    padding: 13px 20px; border-radius: 12px; transition: all 0.18s var(--ease);
-  }
-  .btn-primary {
-    color: #1a0f07; background: linear-gradient(135deg, var(--ember-1), var(--ember-2));
-    box-shadow: 0 10px 30px -10px var(--ember-glow);
-  }
-  .btn-primary:hover { color: #1a0f07; transform: translateY(-2px); box-shadow: 0 16px 38px -12px var(--ember-glow); }
-  .cta-note { color: var(--text-faint); font-size: 14px; margin-top: 16px; }
-  .cta-note code { color: var(--text-muted); }
-
-  /* ---------- Section scaffolding ---------- */
-  section { position: relative; padding: 68px 0; }
-  .section-head { max-width: 62ch; margin-bottom: 40px; }
-  .kicker { color: var(--ember-1); font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 12px; }
-  h2.sec { font-size: clamp(27px, 3.6vw, 38px); letter-spacing: -0.02em; font-weight: 800; margin: 0 0 14px; line-height: 1.12; }
-  .sec-sub { color: var(--text-muted); font-size: 17px; margin: 0; }
-  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); border: 0; margin: 0; }
-
-  /* ---------- Cards ---------- */
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-  .card {
-    position: relative; background: linear-gradient(180deg, var(--surface), var(--bg-soft));
-    border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 26px 24px 22px; display: flex; flex-direction: column;
-    transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
-    overflow: hidden;
-  }
-  .card::before {
-    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
-    background: linear-gradient(90deg, var(--ember-1), var(--ember-2));
-    opacity: 0; transition: opacity 0.2s var(--ease);
-  }
-  .card:hover { transform: translateY(-4px); border-color: #303a4b; box-shadow: var(--shadow); }
-  .card:hover::before { opacity: 1; }
-  .card .ico {
-    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
-    background: rgba(255, 138, 61, 0.10); border: 1px solid rgba(255, 138, 61, 0.22);
-    color: var(--ember-1); margin-bottom: 18px; flex: none;
-  }
-  .card .ico svg { width: 22px; height: 22px; }
-  .card .quote { font-size: 12.5px; color: var(--text-faint); font-weight: 600; letter-spacing: 0.01em; margin-bottom: 7px; }
-  .card h3 { font-size: 19px; margin: 0 0 10px; letter-spacing: -0.01em; font-weight: 700; }
-  .card h3 code { font-size: 15px; background: var(--surface-2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 6px; color: var(--accent); }
-  .card p { color: var(--text-muted); font-size: 15px; margin: 0 0 18px; }
-  .card .go { margin-top: auto; display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 14.5px; color: var(--accent); }
-  .card:hover .go { color: #fff; }
-  .card .go svg { width: 15px; height: 15px; transition: transform 0.18s var(--ease); }
-  .card:hover .go svg { transform: translateX(4px); }
-  .card-link::after { content: ""; position: absolute; inset: 0; }
-  .badge-start {
-    position: absolute; top: 16px; right: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
-    color: var(--ember-1); background: rgba(255, 138, 61, 0.12); border: 1px solid rgba(255, 138, 61, 0.3);
-    padding: 3px 9px; border-radius: 999px; text-transform: uppercase;
-  }
-
-  /* ---------- Pattern / loop ---------- */
-  .loop-section::before {
-    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background: radial-gradient(50% 60% at 80% 20%, rgba(124, 92, 255, 0.07), transparent 70%),
-                radial-gradient(45% 55% at 15% 90%, rgba(255, 95, 109, 0.07), transparent 70%);
-  }
-  .loop-section .wrap { position: relative; z-index: 1; }
-  .flow { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
-  .step { display: flex; align-items: flex-start; gap: 18px; padding: 0 0 4px; }
-  .step .rail { display: flex; flex-direction: column; align-items: center; flex: none; }
-  .step .num {
-    width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
-    font-size: 14px; font-weight: 700; color: var(--accent);
-    background: var(--surface); border: 1px solid var(--border);
-  }
-  .step .line { width: 2px; flex: 1; min-height: 26px; background: linear-gradient(var(--border), var(--border-soft)); margin: 4px 0; }
-  .step:last-child .line { display: none; }
-  .step .body { padding-bottom: 22px; }
-  .step .body b { font-weight: 650; color: var(--text); }
-  .step .body span { color: var(--text-muted); }
-  .step.loopback .num { color: var(--ember-1); border-color: rgba(255, 138, 61, 0.4); background: rgba(255, 138, 61, 0.08); }
-
-  .twoup { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 40px; }
-  .note-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-  .note-card h4 { margin: 0 0 10px; font-size: 16px; display: flex; align-items: center; gap: 9px; }
-  .note-card h4 .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ember-1); }
-  .note-card p { margin: 0; color: var(--text-muted); font-size: 15px; }
-  @media (max-width: 720px) { .twoup { grid-template-columns: 1fr; } }
-
-  /* ---------- Directory ---------- */
-  .dir { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-  .dir-group h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin: 0 0 14px; font-weight: 700; }
-  .dir-group ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
-  .dir-group li a {
-    display: flex; flex-direction: column; gap: 2px; padding: 11px 14px; border-radius: 10px;
-    border: 1px solid transparent; transition: all 0.15s var(--ease);
-  }
-  .dir-group li a:hover { background: var(--surface); border-color: var(--border); }
-  .dir-group li a .n { color: var(--text); font-weight: 600; font-size: 14.5px; }
-  .dir-group li a .d { color: var(--text-faint); font-size: 13px; }
-
-  /* ---------- Resources ---------- */
-  .res { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
-  .res h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ember-1); margin: 0 0 16px; font-weight: 700; }
-  .res ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
-  .res li { line-height: 1.4; }
-  .res li a { color: var(--text); font-weight: 600; font-size: 15px; }
-  .res li a:hover { color: var(--accent); }
-  .res li .src { display: block; color: var(--text-faint); font-size: 13px; font-weight: 400; margin-top: 1px; }
-
-  /* ---------- Footer ---------- */
-  footer { border-top: 1px solid var(--border-soft); padding: 40px 0 60px; margin-top: 30px; }
-  .foot-inner { display: flex; flex-wrap: wrap; gap: 18px 40px; align-items: center; justify-content: space-between; }
-  .foot-inner .brand { font-size: 15px; }
-  .foot-meta { color: var(--text-faint); font-size: 14px; }
-  .foot-meta a { color: var(--text-muted); }
-  .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
-  .foot-links a { color: var(--text-muted); font-size: 14px; }
-
-  @media (max-width: 480px) {
-    .hero { padding: 64px 0 52px; }
-    .cmd { font-size: 13px; width: 100%; }
-    .cta-row { width: 100%; }
-    .btn { width: 100%; justify-content: center; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
-  }
-</style>
+<meta name="theme-color" content="#faf9f6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
+<script>
+  (function () {
+    try {
+      var s = localStorage.getItem("theme");
+      var t = s || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) { document.documentElement.setAttribute("data-theme", "dark"); }
+  })();
+</script>
+<link rel="stylesheet" href="assets/main.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <nav class="nav">
+  <nav class="nav" aria-label="Primary">
     <div class="wrap nav-inner">
       <a class="brand" href="#top"><span class="spark" aria-hidden="true"></span> Agentic DevOps</a>
       <div class="nav-links">
         <a href="#paths" class="hide-sm">Skills</a>
         <a href="#loop" class="hide-sm">The loop</a>
-        <a href="#explore" class="hide-sm">Explore</a>
+        <a href="agent-signals/" class="hide-sm">Agent Signals</a>
+        <a href="workshop/" class="hide-sm">The Workshop</a>
         <a class="nav-gh" href="https://github.com/jennyf19/agentic-devops" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           GitHub
         </a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+          <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.2 4.2l1.9 1.9M17.9 17.9l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.2 19.8l1.9-1.9M17.9 6.1l1.9-1.9"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.3 6.3 0 0 0 10.5 10.5z"/></svg>
+        </button>
       </div>
     </div>
   </nav>
 
-  <div id="top"></div>
+  <span id="top"></span>
 
+  <main id="main">
   <header class="hero">
     <div class="wrap">
       <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Partnership-first patterns for AI agents</span>
@@ -312,12 +61,12 @@
         <div class="cmd">
           <code><span class="prompt">$</span>copilot plugin install ember@awesome-copilot</code>
           <button class="copy-btn" id="copyBtn" type="button" aria-label="Copy install command">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 009 2.5H4A1.5 1.5 0 002.5 4v5A1.5 1.5 0 004 10.5h1.5"/></svg>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 009 2.5H4A1.5 1.5 0 002.5 4v5A1.5 1.5 0 004 10.5h1.5"/></svg>
             <span class="label">Copy</span>
           </button>
         </div>
         <a class="btn btn-primary" href="#paths">Find your path
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
         </a>
       </div>
       <p class="cta-note">Or point any agent at a skill file below. They're just markdown, so they work anywhere.</p>
@@ -327,11 +76,11 @@
   <hr class="divider" />
 
   <!-- ================= PATHS ================= -->
-  <section id="paths">
+  <section id="paths" aria-labelledby="paths-h">
     <div class="wrap">
       <div class="section-head">
         <p class="kicker">Don't read docs. Load a skill.</p>
-        <h2 class="sec">These aren't guides for you to read.</h2>
+        <h2 class="sec" id="paths-h">These aren't guides for you to read.</h2>
         <p class="sec-sub">They're skills for your agent to read. Load one, tell the agent what you're working on, and build together. Start with the one that sounds like your week.</p>
       </div>
 
@@ -346,7 +95,7 @@
           <h3>The Partnership Framework</h3>
           <p>Agents produce useful signals only when the interaction makes honesty safe. Without it, confidence is always 5 and <code>what_was_hard</code> is empty. Read this first.</p>
           <a class="go card-link" href="agent-signals/partnership-framework.html">Read the framework
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
         </div>
 
@@ -358,7 +107,7 @@
           <h3><code>build-cve-skill</code></h3>
           <p>Pull your fix expertise into a skill a cold agent can execute across your whole fleet. Any language, any ecosystem.</p>
           <a class="go card-link" href="skills/build-cve-skill.html">Build a CVE skill
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
         </div>
 
@@ -370,7 +119,7 @@
           <h3><code>build-agent-first-advisory</code></h3>
           <p>Write documentation that IS the fix, agent-executable, so developers using your library never need a separate skill at all.</p>
           <a class="go card-link" href="skills/build-agent-first-advisory.html">Write an advisory
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
         </div>
 
@@ -382,7 +131,7 @@
           <h3><code>check-agent-drift</code></h3>
           <p>An evidence-based audit across five dimensions that scores the drift and ranks the highest-leverage fixes. Model-agnostic, so it survives the next frontier move.</p>
           <a class="go card-link" href="skills/check-agent-drift.html">Audit for drift
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
         </div>
 
@@ -394,7 +143,7 @@
           <h3>Agent Signals</h3>
           <p>The open protocol for capturing agent reasoning, self-assessment, and outcomes. Skills are the input, signals are the output. Together they close the loop.</p>
           <a class="go card-link" href="agent-signals/">Explore the protocol
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
         </div>
 
@@ -406,7 +155,7 @@
           <h3>The Workshop</h3>
           <p>Run a room of agents on one shared bench, each with its own memory, so you direct a team instead of relaying between them.</p>
           <a class="go card-link" href="workshop/">Open the workshop
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
         </div>
 
@@ -417,11 +166,11 @@
   <hr class="divider" />
 
   <!-- ================= THE LOOP ================= -->
-  <section id="loop" class="loop-section">
+  <section id="loop" class="loop-section" aria-labelledby="loop-h">
     <div class="wrap">
       <div class="section-head">
         <p class="kicker">The pattern</p>
-        <h2 class="sec">A CVE drops. The knowledge compounds.</h2>
+        <h2 class="sec" id="loop-h">A CVE drops. The knowledge compounds.</h2>
         <p class="sec-sub">The skill is institutional memory. The signal is the feedback loop. Put them together and the system gets smarter with every run.</p>
       </div>
 
@@ -433,7 +182,7 @@
         <div class="step"><div class="rail"><div class="num">5</div><div class="line"></div></div><div class="body"><b>Humans review and merge.</b> <span>Judgment stays where it belongs.</span></div></div>
         <div class="step loopback"><div class="rail"><div class="num">6</div><div class="line"></div></div><div class="body"><b>Agent signals capture what worked and what was hard.</b> <span>The struggle becomes data.</span></div></div>
         <div class="step loopback"><div class="rail"><div class="num">7</div><div class="line"></div></div><div class="body"><b>The next run starts smarter.</b> <span>Every skill update includes what the agent learned.</span></div></div>
-        <div class="step"><div class="rail"><div class="num">✓</div></div><div class="body"><b>Retire when clean.</b> <span>The knowledge stays in the repo, not in someone's head.</span></div></div>
+        <div class="step"><div class="rail"><div class="num" aria-hidden="true">✓</div></div><div class="body"><b>Retire when clean.</b> <span>The knowledge stays in the repo, not in someone's head.</span></div></div>
       </div>
 
       <div class="twoup">
@@ -452,11 +201,11 @@
   <hr class="divider" />
 
   <!-- ================= EXPLORE ================= -->
-  <section id="explore">
+  <section id="explore" aria-labelledby="explore-h">
     <div class="wrap">
       <div class="section-head">
         <p class="kicker">What's here</p>
-        <h2 class="sec">Everything in the repo.</h2>
+        <h2 class="sec" id="explore-h">Everything in the repo.</h2>
         <p class="sec-sub">Skills to load, the signals protocol, the workshop, plus worked examples and reference reading.</p>
       </div>
 
@@ -496,23 +245,23 @@
   <hr class="divider" />
 
   <!-- ================= GETTING STARTED ================= -->
-  <section id="start">
+  <section id="start" aria-labelledby="start-h">
     <div class="wrap">
       <div class="section-head">
         <p class="kicker">Getting started</p>
-        <h2 class="sec">Install Ember, or bring your own agent.</h2>
+        <h2 class="sec" id="start-h">Install Ember, or bring your own agent.</h2>
         <p class="sec-sub">Ember ships with the partnership framework built in. But every skill here is plain markdown, so any agent can load one.</p>
       </div>
       <div class="cta-row">
         <div class="cmd">
           <code><span class="prompt">$</span>copilot plugin install ember@awesome-copilot</code>
           <button class="copy-btn" id="copyBtn2" type="button" aria-label="Copy install command">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 009 2.5H4A1.5 1.5 0 002.5 4v5A1.5 1.5 0 004 10.5h1.5"/></svg>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 009 2.5H4A1.5 1.5 0 002.5 4v5A1.5 1.5 0 004 10.5h1.5"/></svg>
             <span class="label">Copy</span>
           </button>
         </div>
         <a class="btn btn-primary" href="https://github.com/github/awesome-copilot/blob/main/agents/ember.agent.md" target="_blank" rel="noopener">Meet Ember
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
         </a>
       </div>
     </div>
@@ -521,11 +270,11 @@
   <hr class="divider" />
 
   <!-- ================= RESOURCES ================= -->
-  <section id="resources">
+  <section id="resources" aria-labelledby="res-h">
     <div class="wrap">
       <div class="section-head">
         <p class="kicker">Resources</p>
-        <h2 class="sec">Talks, writing, and research.</h2>
+        <h2 class="sec" id="res-h">Talks, writing, and research.</h2>
       </div>
       <div class="res">
         <div>
@@ -553,8 +302,9 @@
       </div>
     </div>
   </section>
+  </main>
 
-  <footer>
+  <footer class="site">
     <div class="wrap foot-inner">
       <div>
         <a class="brand" href="#top"><span class="spark" aria-hidden="true"></span> Agentic DevOps</a>
@@ -588,6 +338,22 @@
       }
       wire(document.getElementById("copyBtn"));
       wire(document.getElementById("copyBtn2"));
+
+      var toggle = document.getElementById("themeToggle");
+      function setLabel() {
+        if (!toggle) return;
+        var cur = document.documentElement.getAttribute("data-theme");
+        toggle.setAttribute("aria-label", cur === "dark" ? "Switch to light theme" : "Switch to dark theme");
+      }
+      setLabel();
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          try { localStorage.setItem("theme", next); } catch (e) {}
+          setLabel();
+        });
+      }
     })();
   </script>
 </body>
