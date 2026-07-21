@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agentic DevOps — Partnership-first patterns for scaling with AI agents</title>
+<meta name="description" content="Three paths to agents that learn — from CVE skills to feedback loops. Partnership-first patterns for teams building with AI agents as collaborators, not automation." />
+<link rel="canonical" href="https://jennyf19.github.io/agentic-devops/" />
+<meta property="og:title" content="Agentic DevOps" />
+<meta property="og:description" content="Three paths to agents that learn — from CVE skills to feedback loops." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://jennyf19.github.io/agentic-devops/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#0b0d12" />
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-soft: #10131b;
+    --surface: #14181f;
+    --surface-2: #171c25;
+    --border: #232a37;
+    --border-soft: #1c222d;
+    --text: #e8ebf1;
+    --text-muted: #9aa4b4;
+    --text-faint: #6b7484;
+    --ember-1: #ff8a3d;
+    --ember-2: #ff5f6d;
+    --ember-glow: rgba(255, 122, 61, 0.35);
+    --accent: #ffb27a;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --maxw: 1080px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.7);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  a { color: var(--accent); text-decoration: none; transition: color 0.15s var(--ease); }
+  a:hover { color: #fff; }
+
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  code, kbd, pre {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    background: rgba(11, 13, 18, 0.72);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); font-size: 16px; }
+  .brand:hover { color: var(--text); }
+  .spark {
+    width: 22px; height: 22px; border-radius: 7px; flex: none;
+    background: linear-gradient(140deg, var(--ember-1), var(--ember-2));
+    box-shadow: 0 0 16px var(--ember-glow);
+    position: relative;
+  }
+  .spark::after {
+    content: ""; position: absolute; inset: 5px;
+    background: var(--bg); border-radius: 3px;
+    -webkit-mask: radial-gradient(circle at 50% 40%, transparent 0, transparent 3px, #000 3.5px); }
+  .nav-links { display: flex; align-items: center; gap: 6px; }
+  .nav-links a {
+    color: var(--text-muted); font-size: 14.5px; font-weight: 500;
+    padding: 8px 12px; border-radius: 8px; transition: all 0.15s var(--ease);
+  }
+  .nav-links a:hover { color: var(--text); background: var(--surface); }
+  .nav-gh {
+    display: inline-flex !important; align-items: center; gap: 7px;
+    border: 1px solid var(--border);
+  }
+  .nav-gh:hover { border-color: #333c4d; }
+  @media (max-width: 720px) { .nav-links a.hide-sm { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 96px 0 72px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -40% 0 auto 0; height: 720px; z-index: 0;
+    background:
+      radial-gradient(60% 55% at 70% 8%, rgba(255, 95, 109, 0.20), transparent 60%),
+      radial-gradient(50% 50% at 22% 0%, rgba(255, 138, 61, 0.22), transparent 62%),
+      radial-gradient(40% 40% at 50% 30%, rgba(124, 92, 255, 0.10), transparent 70%);
+    filter: blur(6px); pointer-events: none;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(var(--border-soft) 1px, transparent 1px), linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask: radial-gradient(80% 60% at 50% 12%, #000, transparent 78%);
+    mask: radial-gradient(80% 60% at 50% 12%, #000, transparent 78%);
+    opacity: 0.5;
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+    color: var(--accent); background: rgba(255, 138, 61, 0.10);
+    border: 1px solid rgba(255, 138, 61, 0.25); border-radius: 999px;
+    padding: 6px 14px; margin-bottom: 26px;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ember-1); box-shadow: 0 0 10px var(--ember-1); }
+  h1.title {
+    font-size: clamp(38px, 6.2vw, 66px); line-height: 1.04; letter-spacing: -0.03em;
+    font-weight: 800; margin: 0 0 22px; max-width: 15ch;
+  }
+  h1.title .grad {
+    background: linear-gradient(100deg, var(--ember-1), var(--ember-2) 60%, var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { font-size: clamp(17px, 2vw, 20px); color: var(--text-muted); max-width: 60ch; margin: 0 0 22px; }
+  .lede strong { color: var(--text); font-weight: 600; }
+
+  .persist {
+    border-left: 2px solid; border-image: linear-gradient(var(--ember-1), var(--ember-2)) 1;
+    padding: 4px 0 4px 20px; margin: 0 0 36px; max-width: 62ch;
+    color: var(--text-muted); font-size: 16px;
+  }
+  .persist b { color: var(--text); font-weight: 600; }
+
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .cmd {
+    display: inline-flex; align-items: center; gap: 14px; max-width: 100%;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 12px 12px 18px; font-size: 15px;
+    box-shadow: var(--shadow);
+  }
+  .cmd code { color: var(--text); white-space: nowrap; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .cmd code::-webkit-scrollbar { display: none; }
+  .cmd .prompt { color: var(--ember-1); font-weight: 700; margin-right: 2px; user-select: none; }
+  .copy-btn {
+    border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted);
+    border-radius: 8px; padding: 7px 10px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s var(--ease);
+  }
+  .copy-btn:hover { color: var(--text); border-color: #333c4d; background: #1d2430; }
+  .copy-btn.copied { color: #7ee787; border-color: rgba(126, 231, 135, 0.4); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px;
+    padding: 13px 20px; border-radius: 12px; transition: all 0.18s var(--ease);
+  }
+  .btn-primary {
+    color: #1a0f07; background: linear-gradient(135deg, var(--ember-1), var(--ember-2));
+    box-shadow: 0 10px 30px -10px var(--ember-glow);
+  }
+  .btn-primary:hover { color: #1a0f07; transform: translateY(-2px); box-shadow: 0 16px 38px -12px var(--ember-glow); }
+  .cta-note { color: var(--text-faint); font-size: 14px; margin-top: 16px; }
+  .cta-note code { color: var(--text-muted); }
+
+  /* ---------- Section scaffolding ---------- */
+  section { position: relative; padding: 68px 0; }
+  .section-head { max-width: 62ch; margin-bottom: 40px; }
+  .kicker { color: var(--ember-1); font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 12px; }
+  h2.sec { font-size: clamp(27px, 3.6vw, 38px); letter-spacing: -0.02em; font-weight: 800; margin: 0 0 14px; line-height: 1.12; }
+  .sec-sub { color: var(--text-muted); font-size: 17px; margin: 0; }
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); border: 0; margin: 0; }
+
+  /* ---------- Cards ---------- */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .card {
+    position: relative; background: linear-gradient(180deg, var(--surface), var(--bg-soft));
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 26px 24px 22px; display: flex; flex-direction: column;
+    transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    overflow: hidden;
+  }
+  .card::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+    background: linear-gradient(90deg, var(--ember-1), var(--ember-2));
+    opacity: 0; transition: opacity 0.2s var(--ease);
+  }
+  .card:hover { transform: translateY(-4px); border-color: #303a4b; box-shadow: var(--shadow); }
+  .card:hover::before { opacity: 1; }
+  .card .ico {
+    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    background: rgba(255, 138, 61, 0.10); border: 1px solid rgba(255, 138, 61, 0.22);
+    color: var(--ember-1); margin-bottom: 18px; flex: none;
+  }
+  .card .ico svg { width: 22px; height: 22px; }
+  .card .quote { font-size: 12.5px; color: var(--text-faint); font-weight: 600; letter-spacing: 0.01em; margin-bottom: 7px; }
+  .card h3 { font-size: 19px; margin: 0 0 10px; letter-spacing: -0.01em; font-weight: 700; }
+  .card h3 code { font-size: 15px; background: var(--surface-2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 6px; color: var(--accent); }
+  .card p { color: var(--text-muted); font-size: 15px; margin: 0 0 18px; }
+  .card .go { margin-top: auto; display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 14.5px; color: var(--accent); }
+  .card:hover .go { color: #fff; }
+  .card .go svg { width: 15px; height: 15px; transition: transform 0.18s var(--ease); }
+  .card:hover .go svg { transform: translateX(4px); }
+  .card-link::after { content: ""; position: absolute; inset: 0; }
+  .badge-start {
+    position: absolute; top: 16px; right: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
+    color: var(--ember-1); background: rgba(255, 138, 61, 0.12); border: 1px solid rgba(255, 138, 61, 0.3);
+    padding: 3px 9px; border-radius: 999px; text-transform: uppercase;
+  }
+
+  /* ---------- Pattern / loop ---------- */
+  .loop-section::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(50% 60% at 80% 20%, rgba(124, 92, 255, 0.07), transparent 70%),
+                radial-gradient(45% 55% at 15% 90%, rgba(255, 95, 109, 0.07), transparent 70%);
+  }
+  .loop-section .wrap { position: relative; z-index: 1; }
+  .flow { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
+  .step { display: flex; align-items: flex-start; gap: 18px; padding: 0 0 4px; }
+  .step .rail { display: flex; flex-direction: column; align-items: center; flex: none; }
+  .step .num {
+    width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    background: var(--surface); border: 1px solid var(--border);
+  }
+  .step .line { width: 2px; flex: 1; min-height: 26px; background: linear-gradient(var(--border), var(--border-soft)); margin: 4px 0; }
+  .step:last-child .line { display: none; }
+  .step .body { padding-bottom: 22px; }
+  .step .body b { font-weight: 650; color: var(--text); }
+  .step .body span { color: var(--text-muted); }
+  .step.loopback .num { color: var(--ember-1); border-color: rgba(255, 138, 61, 0.4); background: rgba(255, 138, 61, 0.08); }
+
+  .twoup { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 40px; }
+  .note-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .note-card h4 { margin: 0 0 10px; font-size: 16px; display: flex; align-items: center; gap: 9px; }
+  .note-card h4 .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ember-1); }
+  .note-card p { margin: 0; color: var(--text-muted); font-size: 15px; }
+  @media (max-width: 720px) { .twoup { grid-template-columns: 1fr; } }
+
+  /* ---------- Directory ---------- */
+  .dir { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .dir-group h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin: 0 0 14px; font-weight: 700; }
+  .dir-group ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .dir-group li a {
+    display: flex; flex-direction: column; gap: 2px; padding: 11px 14px; border-radius: 10px;
+    border: 1px solid transparent; transition: all 0.15s var(--ease);
+  }
+  .dir-group li a:hover { background: var(--surface); border-color: var(--border); }
+  .dir-group li a .n { color: var(--text); font-weight: 600; font-size: 14.5px; }
+  .dir-group li a .d { color: var(--text-faint); font-size: 13px; }
+
+  /* ---------- Resources ---------- */
+  .res { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
+  .res h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ember-1); margin: 0 0 16px; font-weight: 700; }
+  .res ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .res li { line-height: 1.4; }
+  .res li a { color: var(--text); font-weight: 600; font-size: 15px; }
+  .res li a:hover { color: var(--accent); }
+  .res li .src { display: block; color: var(--text-faint); font-size: 13px; font-weight: 400; margin-top: 1px; }
+
+  /* ---------- Footer ---------- */
+  footer { border-top: 1px solid var(--border-soft); padding: 40px 0 60px; margin-top: 30px; }
+  .foot-inner { display: flex; flex-wrap: wrap; gap: 18px 40px; align-items: center; justify-content: space-between; }
+  .foot-inner .brand { font-size: 15px; }
+  .foot-meta { color: var(--text-faint); font-size: 14px; }
+  .foot-meta a { color: var(--text-muted); }
+  .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .foot-links a { color: var(--text-muted); font-size: 14px; }
+
+  @media (max-width: 480px) {
+    .hero { padding: 64px 0 52px; }
+    .cmd { font-size: 13px; width: 100%; }
+    .cta-row { width: 100%; }
+    .btn { width: 100%; justify-content: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top"><span class="spark" aria-hidden="true"></span> Agentic DevOps</a>
+      <div class="nav-links">
+        <a href="#paths" class="hide-sm">Skills</a>
+        <a href="#loop" class="hide-sm">The loop</a>
+        <a href="#explore" class="hide-sm">Explore</a>
+        <a class="nav-gh" href="https://github.com/jennyf19/agentic-devops" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="top"></div>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Partnership-first patterns for AI agents</span>
+      <h1 class="title">Three paths to agents that <span class="grad">learn</span>.</h1>
+      <p class="lede">Agentic DevOps is for teams building with AI agents <strong>as collaborators, not automation</strong>. From CVE remediation skills to the feedback loop that makes every run start smarter.</p>
+      <p class="persist">What persists when the model changes, the tools evolve, and the platform shifts? <b>The feedback loop. The institutional memory. The partnership between humans and agents.</b></p>
+      <div class="cta-row">
+        <div class="cmd">
+          <code><span class="prompt">$</span>copilot plugin install ember@awesome-copilot</code>
+          <button class="copy-btn" id="copyBtn" type="button" aria-label="Copy install command">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 009 2.5H4A1.5 1.5 0 002.5 4v5A1.5 1.5 0 004 10.5h1.5"/></svg>
+            <span class="label">Copy</span>
+          </button>
+        </div>
+        <a class="btn btn-primary" href="#paths">Find your path
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+      <p class="cta-note">Or point any agent at a skill file below. They're just markdown, so they work anywhere.</p>
+    </div>
+  </header>
+
+  <hr class="divider" />
+
+  <!-- ================= PATHS ================= -->
+  <section id="paths">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Don't read docs. Load a skill.</p>
+        <h2 class="sec">These aren't guides for you to read.</h2>
+        <p class="sec-sub">They're skills for your agent to read. Load one, tell the agent what you're working on, and build together. Start with the one that sounds like your week.</p>
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+          <span class="badge-start">Start here</span>
+          <div class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <div class="quote">Before anything else</div>
+          <h3>The Partnership Framework</h3>
+          <p>Agents produce useful signals only when the interaction makes honesty safe. Without it, confidence is always 5 and <code>what_was_hard</code> is empty. Read this first.</p>
+          <a class="go card-link" href="agent-signals/partnership-framework.html">Read the framework
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M12 8v4"/><circle cx="12" cy="15.5" r="0.6" fill="currentColor"/></svg>
+          </div>
+          <div class="quote">"I have a CVE hitting my repos"</div>
+          <h3><code>build-cve-skill</code></h3>
+          <p>Pull your fix expertise into a skill a cold agent can execute across your whole fleet. Any language, any ecosystem.</p>
+          <a class="go card-link" href="skills/build-cve-skill.html">Build a CVE skill
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5v-13z"/><path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5v-13z"/></svg>
+          </div>
+          <div class="quote">"I own the library / I write the advisory"</div>
+          <h3><code>build-agent-first-advisory</code></h3>
+          <p>Write documentation that IS the fix, agent-executable, so developers using your library never need a separate skill at all.</p>
+          <a class="go card-link" href="skills/build-agent-first-advisory.html">Write an advisory
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 12l4-2.5M12 12l-2.5 4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="quote">"I inherited a skill, is it still current?"</div>
+          <h3><code>check-agent-drift</code></h3>
+          <p>An evidence-based audit across five dimensions that scores the drift and ranks the highest-leverage fixes. Model-agnostic, so it survives the next frontier move.</p>
+          <a class="go card-link" href="skills/check-agent-drift.html">Audit for drift
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none"/><path d="M8.5 8.5a5 5 0 000 7M15.5 8.5a5 5 0 010 7"/><path d="M6 6a9 9 0 000 12M18 6a9 9 0 010 12"/></svg>
+          </div>
+          <div class="quote">"I want agents to learn from every session"</div>
+          <h3>Agent Signals</h3>
+          <p>The open protocol for capturing agent reasoning, self-assessment, and outcomes. Skills are the input, signals are the output. Together they close the loop.</p>
+          <a class="go card-link" href="agent-signals/">Explore the protocol
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="15" width="7" height="5" rx="1.5"/><rect x="14" y="15" width="7" height="5" rx="1.5"/></svg>
+          </div>
+          <div class="quote">"I'm the switchboard between too many tabs"</div>
+          <h3>The Workshop</h3>
+          <p>Run a room of agents on one shared bench, each with its own memory, so you direct a team instead of relaying between them.</p>
+          <a class="go card-link" href="workshop/">Open the workshop
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ================= THE LOOP ================= -->
+  <section id="loop" class="loop-section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">The pattern</p>
+        <h2 class="sec">A CVE drops. The knowledge compounds.</h2>
+        <p class="sec-sub">The skill is institutional memory. The signal is the feedback loop. Put them together and the system gets smarter with every run.</p>
+      </div>
+
+      <div class="flow">
+        <div class="step"><div class="rail"><div class="num">1</div><div class="line"></div></div><div class="body"><b>A CVE drops.</b> <span>The clock starts across every affected repo.</span></div></div>
+        <div class="step"><div class="rail"><div class="num">2</div><div class="line"></div></div><div class="body"><b>The developer who knows the fix writes a skill.</b> <span>30 to 60 minutes, once.</span></div></div>
+        <div class="step"><div class="rail"><div class="num">3</div><div class="line"></div></div><div class="body"><b>Test against one repo.</b> <span>Prove the pattern before it scales.</span></div></div>
+        <div class="step"><div class="rail"><div class="num">4</div><div class="line"></div></div><div class="body"><b>Run across the fleet.</b> <span>The same expertise, applied everywhere at once.</span></div></div>
+        <div class="step"><div class="rail"><div class="num">5</div><div class="line"></div></div><div class="body"><b>Humans review and merge.</b> <span>Judgment stays where it belongs.</span></div></div>
+        <div class="step loopback"><div class="rail"><div class="num">6</div><div class="line"></div></div><div class="body"><b>Agent signals capture what worked and what was hard.</b> <span>The struggle becomes data.</span></div></div>
+        <div class="step loopback"><div class="rail"><div class="num">7</div><div class="line"></div></div><div class="body"><b>The next run starts smarter.</b> <span>Every skill update includes what the agent learned.</span></div></div>
+        <div class="step"><div class="rail"><div class="num">✓</div></div><div class="body"><b>Retire when clean.</b> <span>The knowledge stays in the repo, not in someone's head.</span></div></div>
+      </div>
+
+      <div class="twoup">
+        <div class="note-card">
+          <h4><span class="tag">Skills</span> Institutional memory</h4>
+          <p>When the developer who figured out the fix switches teams, the knowledge doesn't leave with them. It's a markdown file in a repo.</p>
+        </div>
+        <div class="note-card">
+          <h4><span class="tag">Signals</span> The feedback loop</h4>
+          <p>When the agent struggles with a pattern the skill doesn't cover, the signal captures it. The next update includes what the agent learned. The system compounds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ================= EXPLORE ================= -->
+  <section id="explore">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">What's here</p>
+        <h2 class="sec">Everything in the repo.</h2>
+        <p class="sec-sub">Skills to load, the signals protocol, the workshop, plus worked examples and reference reading.</p>
+      </div>
+
+      <div class="dir">
+        <div class="dir-group">
+          <h4>Skills — load into your agent</h4>
+          <ul>
+            <li><a href="skills/build-cve-skill.html"><span class="n">build-cve-skill</span><span class="d">Build a CVE remediation skill</span></a></li>
+            <li><a href="skills/build-agent-first-advisory.html"><span class="n">build-agent-first-advisory</span><span class="d">Write an agent-executable advisory</span></a></li>
+            <li><a href="skills/check-agent-drift.html"><span class="n">check-agent-drift</span><span class="d">Audit a skill or plugin for model drift</span></a></li>
+          </ul>
+        </div>
+        <div class="dir-group">
+          <h4>Agent Signals — the loop</h4>
+          <ul>
+            <li><a href="agent-signals/partnership-framework.html"><span class="n">Partnership Framework</span><span class="d">Start here — why signals need partnership framing</span></a></li>
+            <li><a href="agent-signals/"><span class="n">Agent Signals</span><span class="d">The protocol for self-assessment and trust</span></a></li>
+          </ul>
+          <h4 style="margin-top:22px">The Workshop</h4>
+          <ul>
+            <li><a href="workshop/"><span class="n">The Workshop</span><span class="d">A room of agents on one shared bench</span></a></li>
+          </ul>
+        </div>
+        <div class="dir-group">
+          <h4>Examples &amp; Reference</h4>
+          <ul>
+            <li><a href="examples/remediate-xstream-cve.html"><span class="n">remediate-xstream-cve</span><span class="d">A finished skill: XStream fix for Maven</span></a></li>
+            <li><a href="reference/cve-skill-template.html"><span class="n">cve-skill-template</span><span class="d">Blank template if you know the pattern</span></a></li>
+            <li><a href="reference/agent-first-advisory.html"><span class="n">agent-first-advisory</span><span class="d">The concept behind executable advisories</span></a></li>
+            <li><a href="reference/prompt-guide.html"><span class="n">prompt-guide</span><span class="d">Conversation patterns for your agent</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ================= GETTING STARTED ================= -->
+  <section id="start">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Getting started</p>
+        <h2 class="sec">Install Ember, or bring your own agent.</h2>
+        <p class="sec-sub">Ember ships with the partnership framework built in. But every skill here is plain markdown, so any agent can load one.</p>
+      </div>
+      <div class="cta-row">
+        <div class="cmd">
+          <code><span class="prompt">$</span>copilot plugin install ember@awesome-copilot</code>
+          <button class="copy-btn" id="copyBtn2" type="button" aria-label="Copy install command">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 009 2.5H4A1.5 1.5 0 002.5 4v5A1.5 1.5 0 004 10.5h1.5"/></svg>
+            <span class="label">Copy</span>
+          </button>
+        </div>
+        <a class="btn btn-primary" href="https://github.com/github/awesome-copilot/blob/main/agents/ember.agent.md" target="_blank" rel="noopener">Meet Ember
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ================= RESOURCES ================= -->
+  <section id="resources">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Resources</p>
+        <h2 class="sec">Talks, writing, and research.</h2>
+      </div>
+      <div class="res">
+        <div>
+          <h4>Talks</h4>
+          <ul>
+            <li><a href="https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/" target="_blank" rel="noopener">The Interaction Changes Everything</a><span class="src">Engineering at Microsoft</span></li>
+            <li><a href="https://www.youtube.com/watch?v=jvzPLZQQD3A" target="_blank" rel="noopener">How Microsoft uses Agentic AI to accelerate software delivery</a><span class="src">Microsoft Reactor</span></li>
+            <li><a href="https://ignite.microsoft.com/en-US/sessions/BRK115" target="_blank" rel="noopener">Inside Microsoft's AI transformation across the software lifecycle</a><span class="src">Microsoft Ignite 2025</span></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Writing</h4>
+          <ul>
+            <li><a href="https://jenny424241.substack.com" target="_blank" rel="noopener">The Wow Signal</a><span class="src">Ongoing experiments in human-AI co-creation, on Substack</span></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Research</h4>
+          <ul>
+            <li><a href="https://openai.com/index/how-confessions-can-keep-language-models-honest/" target="_blank" rel="noopener">How Confessions Can Keep Language Models Honest</a><span class="src">OpenAI</span></li>
+            <li><a href="https://www-cdn.anthropic.com/0dd865075ad3132672ee0ab40b05a53f14cf5288.pdf" target="_blank" rel="noopener">Scalable Oversight of AI Systems</a><span class="src">Anthropic</span></li>
+            <li><a href="https://agentskills.io" target="_blank" rel="noopener">Agent Skills Protocol</a><span class="src">Anthropic</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot-inner">
+      <div>
+        <a class="brand" href="#top"><span class="spark" aria-hidden="true"></span> Agentic DevOps</a>
+        <p class="foot-meta" style="margin:10px 0 0">Maintained by <a href="https://github.com/jennyf19" target="_blank" rel="noopener">jennyf19</a> · MIT License</p>
+      </div>
+      <div class="foot-links">
+        <a href="https://github.com/jennyf19/agentic-devops" target="_blank" rel="noopener">GitHub</a>
+        <a href="agent-signals/">Agent Signals</a>
+        <a href="workshop/">The Workshop</a>
+        <a href="https://jenny424241.substack.com" target="_blank" rel="noopener">Substack</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var CMD = "copilot plugin install ember@awesome-copilot";
+      function wire(btn) {
+        if (!btn) return;
+        btn.addEventListener("click", function () {
+          var label = btn.querySelector(".label");
+          var restore = label ? label.textContent : "Copy";
+          function ok() { btn.classList.add("copied"); if (label) label.textContent = "Copied"; setTimeout(function () { btn.classList.remove("copied"); if (label) label.textContent = restore; }, 1600); }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(CMD).then(ok).catch(function () {});
+          } else {
+            var ta = document.createElement("textarea"); ta.value = CMD; document.body.appendChild(ta); ta.select();
+            try { document.execCommand("copy"); ok(); } catch (e) {} document.body.removeChild(ta);
+          }
+        });
+      }
+      wire(document.getElementById("copyBtn"));
+      wire(document.getElementById("copyBtn2"));
+    })();
+  </script>
+</body>
+</html>
