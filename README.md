@@ -98,7 +98,7 @@ they work anywhere.
 
 ### Why use Ember?
 
-Ember has the partnership framework built it.
+Ember has the partnership framework built in.
 
 ---
 
