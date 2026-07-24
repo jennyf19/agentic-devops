@@ -166,6 +166,9 @@ pulse right in the GitHub Copilot app:
 copilot plugin install signals-dashboard@awesome-copilot
 ```
 
+Want the origin story? The workshop grew out of a standalone .NET dashboard, still
+open source at [**github.com/jennyf19/the-workshop**](https://github.com/jennyf19/the-workshop).
+
 Follow along: [**The Wow Signal**](https://jenny424241.substack.com) — ongoing
 experiments in human-AI co-creation.
 
