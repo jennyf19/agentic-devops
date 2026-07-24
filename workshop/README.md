@@ -4,7 +4,7 @@
 > persists when the model changes isn't the agent; it's the room: the shared
 > work, the memory, and the way a desk stands.
 
-**Open source · [github.com/jennyf19/the-workshop](https://github.com/jennyf19/the-workshop)** — a .NET 10 dashboard over your local Copilot CLI sessions. Run `Start.bat` and you have a board.
+**Open source · [github.com/github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/plugins/the-workshop)** — a Copilot CLI plugin that puts a room of desks over your local Copilot CLI sessions. Install it and you have a board.
 
 ---
 
@@ -151,11 +151,20 @@ Skills (input)  →  A room of desks does the work  →  Signals (output)
 
 ## Get it
 
-The workshop is **open source**. The app, the docs, and a 2-minute
-getting-started walkthrough live at
-[**github.com/jennyf19/the-workshop**](https://github.com/jennyf19/the-workshop).
-It builds and runs today — a .NET 10 Blazor dashboard over your local Copilot
-CLI sessions; run `Start.bat` and you have a board.
+The workshop is **open source** and ships as a Copilot CLI plugin on
+[**awesome-copilot**](https://github.com/github/awesome-copilot/tree/main/plugins/the-workshop).
+Install the room — the coordinator, the skills, and the desks:
+
+```
+copilot plugin install the-workshop@awesome-copilot
+```
+
+Then add the live board — the Cairn canvas dashboard that shows every desk's
+pulse right in the GitHub Copilot app:
+
+```
+copilot plugin install signals-dashboard@awesome-copilot
+```
 
 Follow along: [**The Wow Signal**](https://jenny424241.substack.com) — ongoing
 experiments in human-AI co-creation.
