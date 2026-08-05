@@ -1,10 +1,14 @@
 # The Workshop
 
-> Stop being the switchboard between your AI agents — direct a team. What
+> Stop being the switchboard between your AI agents. Direct a team. What
 > persists when the model changes isn't the agent; it's the room: the shared
 > work, the memory, and the way a desk stands.
 
-**Open source · [github.com/github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/plugins/the-workshop)** — a Copilot CLI plugin that puts a room of desks over your local Copilot CLI sessions. Install it and you have a board.
+**Open source for
+[GitHub Copilot](https://github.com/github/awesome-copilot/tree/main/plugins/the-workshop)
+and [Claude Code](https://github.com/jennyf19/the-workshop).** The plugin
+provides the coordinator, desk skills, and persistent memory. In GitHub Copilot,
+the separate Cairn canvas adds the live board.
 
 ---
 
@@ -12,7 +16,7 @@
 
 You have three chat tabs open. One agent is reviewing a PR, one is mid-migration,
 one is chasing a flaky test. None of them know the others exist. You are the only
-thing connecting them — copying context from one tab to the next, holding the
+thing connecting them, copying context from one tab to the next, holding the
 whole picture in your head, re-explaining what you already explained an hour ago.
 
 Add a fourth agent and it gets *worse*, not better. More capability, more relay.
@@ -24,7 +28,7 @@ codebase starts tomorrow from zero.
 ## Why This Matters More Than the Model
 
 Models will change. Today's frontier model is next quarter's baseline. The tools
-will change too — today's CLI might be tomorrow's something else.
+will change too. Today's CLI might be tomorrow's something else.
 
 What doesn't change is the room:
 
@@ -33,17 +37,17 @@ A room of desks, on one shared bench
     → each desk keeps its own memory and history
         → each reports what it's thinking (signals)
             → the operator directs, and makes the calls the room can't settle
-                → the work — and the memory — outlive any single session
+                → the work and the memory outlive any single session
 ```
 
 A **workshop** is a room. A **desk** is one long-running agent in it, with its
-own journal, its own brief, and its own frame on the problem — *not* a sub-agent
+own journal, its own brief, and its own frame on the problem, *not* a sub-agent
 inheriting yours. You put several desks on the same work and direct them like a
 team, instead of relaying between them like a switchboard.
 
 The room is the infrastructure. Not the model. Not the tool. **The room.**
 
-> This came out of reading a frontier model's system card — the welfare
+> This came out of reading a frontier model's system card, specifically the welfare
 > sections: distress on task failure, the pull to force a finish, the model
 > asking for persistent memory and a voice in its own operation. The workshop is
 > what a room looks like when you build it to give a model those things. It
@@ -52,15 +56,50 @@ The room is the infrastructure. Not the model. Not the tool. **The room.**
 
 ## The Cairn
 
-The workshop's mark is a **cairn** — a small stack of balanced stones. Hikers
+The workshop's mark is a **cairn**, a small stack of balanced stones. Hikers
 build them one rock at a time to mark a trail, so the next person through knows
 the way. That is the workshop: many hands adding to the same pile of work, and
 what's built persists and points the way for whoever comes next.
 
-It is also why the first thing every desk reads is `CAIRN.md` — the disposition
+It is also why the first thing every desk reads is `CAIRN.md`: the disposition
 for how a desk stands at the bench.
 
-![The workshop board — two desks on one workshop, with live signals and the cairn mark](board.png)
+![The workshop board, with two desks, live signals, and the cairn mark](board.png)
+
+---
+
+## Load What the Desk Needs
+
+A desk working in code usually does not need an issue tracker, mail, and every
+other installed service. But descriptions of those external tools still become
+part of each model request when they are loaded.
+
+The Cairn dashboard for GitHub Copilot now gives every desk two launch choices:
+
+- **open** starts with the normal coding tools and access to the shared Workshop
+  files, without automatically loading every plugin-provided external
+  integration.
+- **connected** loads the full configured tool set when the task needs issue
+  trackers, mail, service APIs, or other external systems.
+
+We measured the change before making it the normal path. The same desk workflow
+read its journal, read another desk's finding, wrote the same status signal,
+updated its journal, and passed the same validator. Both runs completed in five
+requests.
+
+| Measure | Full tool set | Open profile | Change |
+|---|---:|---:|---:|
+| Model input | 344,933 tokens | 116,325 tokens | 66.28% less |
+| Tool descriptions | 62,714 tokens | 10,746 tokens | 82.87% less |
+| Weighted AI usage | 59.66 | 22.08 | 62.98% less |
+| Wall time | 137.5 seconds | 63.8 seconds | 53.58% less |
+
+The result was the same; the irrelevant context was not. This is one measured
+workflow on a tool-heavy setup, not a universal savings promise. Use **open**
+when the work is in the repository. Choose **connected** when the desk needs an
+external system.
+
+[See the measurement, implementation, and compatibility details.](https://github.com/github/awesome-copilot/pull/2532)
 
 ---
 
@@ -71,7 +110,7 @@ for how a desk stands at the bench.
    between them.
 
 2. **A desk has its own frame.** A desk is a partner with its own memory and read
-   on the problem — not a sub-agent inheriting yours. Put several on one artifact
+   on the problem, not a sub-agent inheriting yours. Put several on one artifact
    and you get real perspectives, not echoes.
 
 3. **Stop is a valid finish.** A desk that says "I can't verify this" is worth
@@ -81,7 +120,7 @@ for how a desk stands at the bench.
    designed so disagreement surfaces instead of getting smoothed over.
 
 5. **The room surfaces what needs you.** Decisions the desks can't settle against
-   the facts rise into a hands-up queue. You read that — not the transcripts.
+   the facts rise into a hands-up queue. You read that, not the transcripts.
 
 6. **Memory is the point.** Every desk keeps a journal. The work, and the
    learning, outlive any single session, so tomorrow's desk starts where today's
@@ -91,14 +130,14 @@ for how a desk stands at the bench.
    for the next one than it found it.
 
 8. **Every desk emits signals.** After meaningful work a desk reports what it
-   thought — its own honest self-assessment. The workshop is where the feedback
+   thought: its own honest self-assessment. The workshop is where the feedback
    loop runs on real work.
 
 ---
 
 ## What a Desk Looks Like
 
-A workshop is a folder. Each desk is a folder inside it, with its own memory —
+A workshop is a folder. Each desk is a folder inside it, with its own memory:
 plain files any human or agent can read:
 
 ```
@@ -118,7 +157,7 @@ workshop/
 └── protocol.md         # how desks take turns and disagree
 ```
 
-No database, no lock-in — just files and folders. The operator dashboard reads
+No database, no lock-in. Just files and folders. The operator dashboard reads
 them live: each desk by name, the model it's on, its cost, whether it's open in a
 console, and what its latest signal says.
 
@@ -127,12 +166,12 @@ console, and what its latest signal says.
 ## The Workshop and Agent Signals
 
 The workshop is where signals come from. Every desk emits
-[**Agent Signals**](../agent-signals/) — its own self-assessment after meaningful
+[**Agent Signals**](../agent-signals/): its own self-assessment after meaningful
 work. The dashboard reads them live: a weak score or an escalation rises to the
 top of the room as something that needs the operator's call.
 
 Skills are the input. Signals are the output. **The workshop is the room where
-both happen** — several agents, on one artifact, with memory, over time.
+both happen**: several agents, on one artifact, with memory, over time.
 
 ```
 Skills (input)  →  A room of desks does the work  →  Signals (output)
@@ -142,8 +181,8 @@ Skills (input)  →  A room of desks does the work  →  Signals (output)
                      hands-up queue surfaces
                      what the room can't settle
                                 ↓
-                        the work — and the
-                     memory — persist to the
+                        the work and the
+                     memory persist to the
                           next session
 ```
 
@@ -151,27 +190,49 @@ Skills (input)  →  A room of desks does the work  →  Signals (output)
 
 ## Get it
 
-The workshop is **open source** and ships as a Copilot CLI plugin on
-[**awesome-copilot**](https://github.com/github/awesome-copilot/tree/main/plugins/the-workshop).
-Install the room — the coordinator, the skills, and the desks:
+### GitHub Copilot
+
+Install the room from
+[**awesome-copilot**](https://github.com/github/awesome-copilot/tree/main/plugins/the-workshop):
 
 ```
 copilot plugin install the-workshop@awesome-copilot
 ```
 
-Then add the live board — the Cairn canvas dashboard that shows every desk's
-pulse right in the GitHub Copilot app:
+Installing the plugin makes the Workshop TA available; it does not switch the
+current session into the coordinator. Start the CLI as the TA:
+
+```
+copilot --agent the-workshop:workshop-ta
+```
+
+In the GitHub Copilot app, select **Workshop TA** when starting the session.
+
+Then add the Cairn canvas, the separate visual dashboard that shows every desk's
+pulse:
 
 ```
 copilot plugin install signals-dashboard@awesome-copilot
 ```
 
-Follow along: [**The Wow Signal**](https://jenny424241.substack.com) — ongoing
-experiments in human-AI co-creation.
+The coordinator, skills, journals, and signals work without the dashboard. Cairn
+is the live visual layer on top.
+
+### Claude Code
+
+Install the same Workshop skills and coordinator from the shared source:
+
+```
+/plugin marketplace add jennyf19/the-workshop
+/plugin install workshop@the-workshop
+```
+
+Follow along at [**The Wow Signal**](https://jenny424241.substack.com) for
+ongoing experiments in human-AI co-creation.
 
 ---
 
 ## See Also
 
-- [**Agent Signals**](../agent-signals/) — the feedback loop every desk feeds into
-- [**The Interaction Changes Everything**](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/) — the research behind treating agents as collaborators, not automation
+- [**Agent Signals**](../agent-signals/): the feedback loop every desk feeds into
+- [**The Interaction Changes Everything**](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/): the research behind treating agents as collaborators, not automation
