@@ -85,6 +85,15 @@
           setLabel();
         });
       }
+
+      document.querySelectorAll(".prose h2[id], .prose h3[id], .prose h4[id]").forEach(function (heading) {
+        var anchor = document.createElement("a");
+        anchor.className = "heading-anchor";
+        anchor.href = "#" + heading.id;
+        anchor.setAttribute("aria-label", "Direct link to " + heading.textContent.trim());
+        anchor.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6.5 9.5l3-3M5.1 11.9l-1 .9a3 3 0 0 1-4.2-4.2l2.7-2.7a3 3 0 0 1 4.2 0M10.9 4.1l1-.9a3 3 0 0 1 4.2 4.2l-2.7 2.7a3 3 0 0 1-4.2 0"/></svg>';
+        heading.appendChild(anchor);
+      });
     })();
   </script>
 </body>
