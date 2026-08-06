@@ -277,6 +277,15 @@ footer.site { border-top: 1px solid var(--border-soft); padding: 40px 0 60px; ma
 .prose h2 { font-size: 26px; letter-spacing: -0.015em; font-weight: 750; margin: 52px 0 14px; padding-top: 14px; border-top: 1px solid var(--border-soft); }
 .prose h3 { font-size: 20px; font-weight: 700; margin: 34px 0 10px; letter-spacing: -0.01em; }
 .prose h4 { font-size: 16px; font-weight: 700; margin: 26px 0 8px; color: var(--text); }
+.prose h2[id], .prose h3[id], .prose h4[id] { scroll-margin-top: 80px; }
+.prose .heading-anchor {
+  display: inline-flex; align-items: center; margin-left: 8px; color: var(--text-faint);
+  text-decoration: none; opacity: 0; vertical-align: middle; transition: color 0.15s var(--ease), opacity 0.15s var(--ease);
+}
+.prose .heading-anchor svg { width: 0.78em; height: 0.78em; }
+.prose h2:hover .heading-anchor, .prose h3:hover .heading-anchor, .prose h4:hover .heading-anchor,
+.prose .heading-anchor:focus-visible { color: var(--accent); opacity: 1; }
+@media (hover: none) { .prose .heading-anchor { opacity: 1; } }
 .prose p { margin: 0 0 18px; color: var(--text-muted); }
 .prose strong { color: var(--text); font-weight: 650; }
 .prose a { text-decoration: underline; text-underline-offset: 2px; text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent); }
@@ -306,6 +315,7 @@ footer.site { border-top: 1px solid var(--border-soft); padding: 40px 0 60px; ma
   .cmd { font-size: 13px; width: 100%; }
   .cta-row { width: 100%; }
   .cta-row .btn { width: 100%; justify-content: center; }
+  .prose .heading-anchor { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
