@@ -83,6 +83,16 @@ each with its own memory, so you direct a team instead of relaying between them.
 > the way a desk stands. Every desk emits signals — the workshop is where the
 > feedback loop runs on real work.
 
+### "I want a local model on one sealed job"
+
+Open **[Sealed Delegation](https://github.com/jennyf19/sealed-delegation)** —
+frontier-guided delegation to a local model for bounded, independently
+verifiable work.
+
+> Give the local child one task and only the files you chose. It returns a
+> proposal. A separate check verifies the answer. Copilot keeps authority.
+> Research preview, not autonomous local development, and not a savings claim.
+
 ---
 
 ## Getting Started
