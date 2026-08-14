@@ -103,6 +103,34 @@ external system.
 
 ---
 
+## Local Delegation: a local worker, not a local desk
+
+Cairn also exposes a **Local** toggle. It is orthogonal to **open** /
+**connected**:
+
+```text
+repo / connected        = which tools the frontier desk can see
+Local Delegation off/on = whether that desk may invoke a bounded local worker
+```
+
+When Local is **effective**, the frontier desk may send cleared, bounded
+subtasks — staged-file reads and evidence checks — through
+[**Sealed Delegation**](../sealed-delegation/). The local model returns a
+proposal. An independent gate decides whether anything is kept. Conversation,
+judgment, and the final answer stay with the frontier desk.
+
+Availability is fail-closed: the `local-agent-delegation` skill must be
+installed, and a qualified Foundry Local route must be declared. Otherwise the
+control shows why and does not take effect. Operator preference is stored
+user-locally so a cloned workshop cannot ship `preference: on`.
+
+This is not whole-session-local coding, and it is not a savings claim.
+`Handled locally` is utilization until a gate accepts the artifact.
+
+[Read the full Sealed Delegation pattern →](../sealed-delegation/)
+
+---
+
 ## Principles
 
 1. **Direct, don't relay.** You set direction and make the calls the room can't
@@ -234,5 +262,7 @@ ongoing experiments in human-AI co-creation.
 
 ## See Also
 
+- [**Sealed Delegation**](../sealed-delegation/): bounded local workers with an
+  independent gate — what the Cairn Local toggle turns on
 - [**Agent Signals**](../agent-signals/): the feedback loop every desk feeds into
 - [**The Interaction Changes Everything**](https://devblogs.microsoft.com/engineering-at-microsoft/the-interaction-changes-everything-treating-ai-agents-as-collaborators-not-automation/): the research behind treating agents as collaborators, not automation
