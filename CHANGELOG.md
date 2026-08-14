@@ -2,6 +2,15 @@
 
 All notable changes to Agentic DevOps will be documented here.
 
+## [0.4.0] - 2026-08-14
+
+### Added
+- Sealed Delegation card and nav link pointing to https://github.com/jennyf19/sealed-delegation
+- README section for sealed local delegation
+
+### Changed
+- Homepage hero no longer frames the site as "three paths"; it now presents open-ended patterns for agents that learn
+
 ## [0.3.0] - 2026-08-05
 
 ### Added
