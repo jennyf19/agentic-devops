@@ -105,8 +105,9 @@ external system.
 
 ## Local Delegation: a local worker, not a local desk
 
-Cairn also exposes a **Local** toggle. It is orthogonal to **open** /
-**connected**:
+Local Delegation shipped in the `signals-dashboard` 0.3.0 release on
+awesome-copilot. Cairn now exposes a **Local** toggle that is orthogonal to
+**open** / **connected**:
 
 ```text
 repo / connected        = which tools the frontier desk can see
@@ -245,6 +246,12 @@ copilot plugin install signals-dashboard@awesome-copilot
 
 The coordinator, skills, journals, and signals work without the dashboard. Cairn
 is the live visual layer on top.
+
+Already have Cairn installed? Update it to the release with Local Delegation:
+
+```
+copilot plugin update signals-dashboard@awesome-copilot
+```
 
 ### Claude Code
 
