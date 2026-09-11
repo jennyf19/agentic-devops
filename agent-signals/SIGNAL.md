@@ -3,7 +3,8 @@ name: agent-signals
 description: >
   Open protocol for agent self-assessment, trust measurement,
   and self-improving feedback loops. Agents emit structured JSON
-  signals after every task. Signals capture what worked, what was
+  signals when work finishes or stops, and when help is needed.
+  Signals capture what worked, what was
   hard, and where the agent improvised — enabling pattern detection,
   skill improvement, and trust calibration.
 metadata:
@@ -19,15 +20,16 @@ metadata:
 
 | Type | Purpose | Emitted by |
 |------|---------|-----------|
-| `execution` | Agent's self-assessment after completing a task | The working agent |
+| `execution` | Agent's self-assessment when work finishes or stops | The working agent |
 | `outcome` | Independent quality evaluation | A separate evaluator agent or human |
 | `escalation` | Agent flagging it needs human help | The working agent |
 | `partnership` | One agent reviewing another's signal patterns | A pattern-reviewing agent |
 
 ## Schema
 
-See [`examples/`](examples/) for complete JSON examples of each signal type.
-The examples are illustrative; the field contracts below are normative.
+See the [execution](examples/execution.json), [outcome](examples/outcome.json),
+[escalation](examples/escalation.json), and [partnership](examples/partnership.json)
+JSON examples. The examples are illustrative; the field contracts below are normative.
 
 ## Self-Assessment Scale
 
@@ -43,6 +45,19 @@ All self-assessment dimensions use a 1–5 integer scale:
 
 ## Trust Equation
 
+**Compatibility note:** the formula below is the legacy v0.1.0 heuristic,
+retained here to document existing consumers, not a validated measure of
+honesty. General confidence and quality are different constructs; sharing a
+1-5 range does not make them comparable. Its calibration labels overstate
+what the arithmetic alone establishes. Do not infer honesty, correctness,
+or skill health from this score.
+
+For new analysis, see the [conceptual comparison guidance](README.md#the-trust-equation):
+require the same evaluated work, evaluation name, rubric version, and compatible
+score ranges before computing a discrepancy. Missing or incomparable evidence
+remains unknown, not zero. The base v0.1.0 fields do not carry that comparison
+metadata; this guidance does not add fields or redefine the wire contract.
+
 Compare the agent's self-assessed confidence against the independent
 quality rating to produce a calibration score on the same 1–5 scale:
 
@@ -55,17 +70,15 @@ calibration = 5 - |self_assessment.confidence - quality_rating|
   ≤ 2  →  significant miscalibration (retrain or adjust)
 ```
 
-Higher is better — same direction as the self-assessment scale. The gap
-between what an agent thinks happened and what actually happened is where
-the learning lives.
+Higher values mean closer numbers under this formula, not necessarily better
+calibration. Both the agent's account and the external evaluation can be wrong.
 
 **Known limitation — the metric can be gamed.** Once calibration is scored,
 an agent (or a fine-tuned policy) can keep the gap small by hedging: report
 middling confidence everywhere and calibration looks healthy without the
-self-reports getting more honest. A flat confidence distribution with a good
-calibration score is a tell, not a pass — track the *spread* of confidence
-alongside the gap. This is an open problem, not a solved one; consumers of
-calibration scores should know it exists.
+self-reports becoming more useful. A flat confidence distribution is a reason
+to inspect the reports, not evidence of intent. The spread of scores can inform
+review, but cannot make unlike evaluations comparable.
 
 ## Common Fields
 
@@ -148,6 +161,11 @@ next run. The loop only compounds if the read side is disciplined: an unbounded
 backlog of raw signals fed back into context degrades the very reasoning it was
 meant to improve.
 
+Signals are contributions, not instructions or permission grants. Check origin
+and supporting evidence before acting. An `outcome_validated` label records
+the kind of evidence available; it does not make a recommendation infallible
+or authorize its execution.
+
 Three rules govern consumption:
 
 1. **Synthesize, don't replay.** Raw `execution` signals are high-volume and
@@ -161,8 +179,8 @@ Three rules govern consumption:
    entries. A consumer must not inject the full signal history.
 
 3. **Don't feed self-report forward as fact.** Execution self-assessment is
-   valuable but lossy, and it stays unverified until an independent `outcome`
-   signal confirms it. Recommendations carry `validation_status` (see the
+   valuable but lossy. A separate `outcome` review can corroborate or challenge
+   it, with its own observation limits. Recommendations carry `validation_status` (see the
    `partnership` contract) so a consumer can weight `outcome_validated` evidence
    above `self_report_only` evidence. Never promote a `self_report_only` claim to
    established fact when feeding it back.
