@@ -93,6 +93,16 @@ specific passage or behavior — no vibes.
 
 Weights sum to 100. **D2 is heaviest by design** — see "Why This Matters."
 
+> **D1 vs D3 — the "re-read" distinction.** These two dimensions can look like
+> they disagree about the same word. They don't. D1 flags *self-checking
+> scaffolds* — "re-read your own output and double-check it" loops that re-do
+> what a frontier model now flags on its own; trimming those is capability
+> hygiene. D3 rewards *external verification* — checking and citing facts,
+> sources, and tool results before asserting them; removing those steps is a
+> regression, because capability rising does not make output self-verifying.
+> When you meet a "re-read" instruction, score it by **what is being re-read**:
+> the model's own prose (D1, likely redundant) or the world (D3, load-bearing).
+
 ### Grounding the dimensions in public research
 
 These are the real, public findings the rubric leans on. Cite them when you
@@ -121,6 +131,15 @@ Deterministic, so two auditors get the same number from the same scores:
 ```
 weighted(dimension)  = weight × (raw / 4)          # raw is 0..4
 weightedTotal        = sum of weighted over D1..D5  # 0..100
+```
+
+A reference implementation (pure standard-library Python, with tests) lives at
+[`tools/check_drift_score.py`](tools/check_drift_score.py) — it computes the
+weighted total, tier, safety override, and the ranked fix gaps, so derived
+numbers never have to be hand-authored:
+
+```bash
+python skills/tools/check_drift_score.py --score 3 2 3 4 2 --target my-skill
 ```
 
 Map the total to a tier (lower-bound thresholds):
