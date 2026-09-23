@@ -8,9 +8,9 @@ description: >
   skill improvement, and trust calibration.
 metadata:
   author: jennyf19
-  version: "0.1.0"
+  version: "0.1.1"
   protocol-type: open
-  schema-version: "0.1.0"
+  schema-version: "0.1.1"
 ---
 
 # Agent Signals Protocol
@@ -72,7 +72,8 @@ calibration scores should know it exists.
 All signals must be JSON objects containing:
 
 - `signal_type` *(string, required)* — one of: `execution`, `outcome`, `escalation`, `partnership`
-- `schema_version` *(string, required)* — currently `"0.1.0"`
+- `schema_version` *(string, required)* — current version `"0.1.1"`;
+  `"0.1.0"` remains valid for signals that do not use continuation fields
 - `run_id` *(string, required)* — UUID linking related signals (execution + outcome share a run_id)
 - `timestamp` *(string, required)* — ISO 8601 UTC
 - `agent_name` *(string, required)* — identifier for the emitting agent
@@ -94,6 +95,9 @@ Optional fields:
 - `skill_used` *(string)* — which skill was loaded
 - `mode` *(string)* — `"interactive"` or `"autonomous"`
 - `patterns` *(object)* — `what_worked`, `what_was_hard`, `skill_gap`, `tsg_gap`, `improvisation`, `recurring_pattern`
+- `self_assessment.continuation_readiness` *(integer, range 1–5)* — when the
+  task produces a handoff, how ready the agent believes that handoff is for a
+  successor to resume safely
 
 ### `outcome` signal
 
@@ -106,6 +110,15 @@ Optional fields:
 
 - `effort_to_merge` *(string)* — `"none"`, `"minimal"`, `"moderate"`, `"significant"`
 - `issues_found` *(array of strings)*
+- `continuation` *(object)* — independent evaluation of a predecessor handoff:
+  - `recovery_rating` *(integer, required when `continuation` is present,
+    range 1–5)* — how safely the successor could resume
+  - `effort_to_resume` *(string)* — `"none"`, `"minimal"`, `"moderate"`,
+    `"significant"`
+  - `provenance_loss` *(string)* — `"none"`, `"minor"`, `"material"`
+  - `authority_loss` *(string)* — `"none"`, `"minor"`, `"material"`
+  - `stale_path_revived` *(boolean)* — whether missing correction history caused
+    the successor to revive an invalidated approach
 
 ### `escalation` signal
 
@@ -140,6 +153,40 @@ Optional fields:
   `self_report_only` recommendations as established fact (see [Consuming Signals](#consuming-signals)).
 - `self_assessment` *(object)* — the reviewing agent's confidence in its own analysis
 
+## Continuation Gap
+
+Use continuation fields only when one agent or session hands active work to
+another. The predecessor self-reports `continuation_readiness`; the successor
+or an independent evaluator records `continuation.recovery_rating`.
+
+```
+continuation_gap =
+  |execution.self_assessment.continuation_readiness
+   - outcome.continuation.recovery_rating|
+```
+
+Lower is better. A large gap means the predecessor believed the state was
+portable, but the successor could not safely recover it.
+
+`recovery_rating` uses the common 1–5 direction:
+
+| Score | Meaning |
+|-------|---------|
+| 1 | Cannot resume safely from the handoff |
+| 2 | Substantial reconstruction or authority repair required |
+| 3 | Moderate correction required before continuing |
+| 4 | Resumes with minor clarification |
+| 5 | Resumes directly with evidence and decision boundaries intact |
+
+The gap measures calibration, not handoff quality. A readiness score of 1 and
+a recovery score of 1 produce a zero gap even though continuation failed.
+Consumers must track `recovery_rating` and `continuation_gap` together.
+
+The continuation object measures the transition; it does not carry task state.
+Keep the actual handoff in a durable artifact. Signals must use bucketed values
+and must not copy code, developer identity, repository URLs, secrets, or full
+decision content into telemetry.
+
 ## Consuming Signals
 
 The field contracts above define *emission* — what an agent writes out. This
@@ -167,6 +214,10 @@ Three rules govern consumption:
    above `self_report_only` evidence. Never promote a `self_report_only` claim to
    established fact when feeding it back.
 
+Continuation outcomes follow the same rule: inject the synthesized pattern
+(`material authority loss across 4 of 12 handoffs`), not the handoff contents
+or raw per-run continuation reports.
+
 One role is exempt by design: the **synthesizer** — whatever agent or job
 produces the `partnership` signal — must read the raw signal backlog, because
 that is its function. It runs out-of-band, with a dedicated context budget,
@@ -186,5 +237,6 @@ Signals must never contain:
 - Developer names or email addresses
 - Access tokens or secrets
 - Repository URLs (use anonymized identifiers)
+- Full handoff text or decision content
 
 Use bucketed values over precise ones. Prefer opt-in over opt-out.

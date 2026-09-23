@@ -1,6 +1,6 @@
 {
   "signal_type": "execution",
-  "schema_version": "0.1.0",
+  "schema_version": "0.1.1",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
   "agent_name": "cve-remediation-agent",
   "skill_used": "cve-remediation",
@@ -11,7 +11,8 @@
     "completeness": 5,
     "confidence": 3,
     "tsg_alignment": 2,
-    "developer_experience": 4
+    "developer_experience": 4,
+    "continuation_readiness": 4
   },
 
   "patterns": {
