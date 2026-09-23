@@ -74,7 +74,8 @@ All signals must be JSON objects containing:
 - `signal_type` *(string, required)* — one of: `execution`, `outcome`, `escalation`, `partnership`
 - `schema_version` *(string, required)* — current version `"0.1.1"`;
   `"0.1.0"` remains valid for signals that do not use continuation fields
-- `run_id` *(string, required)* — UUID linking related signals (execution + outcome share a run_id)
+- `run_id` *(string, required)* — UUID linking related signals (an execution
+  and the outcomes evaluating it share a run_id)
 - `timestamp` *(string, required)* — ISO 8601 UTC
 - `agent_name` *(string, required)* — identifier for the emitting agent
 
@@ -94,6 +95,8 @@ Optional fields:
 
 - `skill_used` *(string)* — which skill was loaded
 - `mode` *(string)* — `"interactive"` or `"autonomous"`
+- `resumed_from_run_id` *(string, UUID)* — predecessor execution run when this
+  execution resumes active work from a handoff
 - `patterns` *(object)* — `what_worked`, `what_was_hard`, `skill_gap`, `tsg_gap`, `improvisation`, `recurring_pattern`
 - `self_assessment.continuation_readiness` *(integer, range 1–5)* — when the
   task produces a handoff, how ready the agent believes that handoff is for a
@@ -118,7 +121,8 @@ Optional fields:
   - `provenance_loss` *(string)* — `"none"`, `"minor"`, `"material"`
   - `authority_loss` *(string)* — `"none"`, `"minor"`, `"material"`
   - `stale_path_revived` *(boolean)* — whether missing correction history caused
-    the successor to revive an invalidated approach
+    the successor to revive an invalidated approach; omit when not assessed,
+    and use `false` only when an evaluator checked for revival
 
 ### `escalation` signal
 
@@ -168,6 +172,16 @@ continuation_gap =
 Lower is better. A large gap means the predecessor believed the state was
 portable, but the successor could not safely recover it.
 
+The continuation outcome uses the predecessor execution's `run_id`. The
+successor execution uses a new `run_id` and sets `resumed_from_run_id` to the
+predecessor, making the chain joinable without an evaluator guessing lineage:
+
+```
+predecessor execution (run A)
+    → continuation outcome (run A)
+        → successor execution (run B, resumed_from_run_id: run A)
+```
+
 `recovery_rating` uses the common 1–5 direction:
 
 | Score | Meaning |
@@ -181,6 +195,23 @@ portable, but the successor could not safely recover it.
 The gap measures calibration, not handoff quality. A readiness score of 1 and
 a recovery score of 1 produce a zero gap even though continuation failed.
 Consumers must track `recovery_rating` and `continuation_gap` together.
+
+Consumers should also retain direction:
+
+```
+continuation_delta =
+  execution.self_assessment.continuation_readiness
+  - outcome.continuation.recovery_rating
+```
+
+A positive delta means readiness was overclaimed; a negative delta means it was
+underclaimed. Positive deltas are generally higher risk because the successor
+may trust state that is less recoverable than promised.
+
+`stale_path_revived` is often observable only after later work exposes the
+mistake. Omit the field when it was not assessed; absence is weak evidence.
+Similarly, `continuation_readiness` without a continuation outcome is
+unverified, not evidence that the handoff succeeded.
 
 The continuation object measures the transition; it does not carry task state.
 Keep the actual handoff in a durable artifact. Signals must use bucketed values

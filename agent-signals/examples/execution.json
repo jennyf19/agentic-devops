@@ -2,6 +2,7 @@
   "signal_type": "execution",
   "schema_version": "0.1.1",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
+  "resumed_from_run_id": "7b1d63ec-2a5c-4617-b66a-782881b08dc5",
   "agent_name": "cve-remediation-agent",
   "skill_used": "cve-remediation",
   "mode": "interactive",

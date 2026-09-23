@@ -110,6 +110,7 @@ Two core types:
   "signal_type": "execution",
   "schema_version": "0.1.1",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
+  "resumed_from_run_id": "7b1d63ec-2a5c-4617-b66a-782881b08dc5",
   "timestamp": "2026-04-08T03:00:00Z",
   "agent_name": "cve-remediation-agent",
   "skill_used": "cve-remediation",
@@ -240,6 +241,16 @@ continuation_gap =
    - outcome.continuation.recovery_rating|
 ```
 
+The continuation outcome keeps the predecessor's `run_id`, which is what makes
+the gap join possible. The successor starts a new execution `run_id` and sets
+`resumed_from_run_id` to the predecessor:
+
+```
+predecessor execution (run A)
+    → continuation outcome (run A)
+        → successor execution (run B, resumed_from_run_id: run A)
+```
+
 The recovery rating measures what the successor could safely recover:
 
 | Rating | Meaning |
@@ -257,6 +268,25 @@ whether a stale path was revived.
 The gap measures calibration, not handoff quality. A predecessor rating itself
 1 and a successor also rating recovery 1 produces a zero gap even though the
 handoff failed. Always track `recovery_rating` and the gap together.
+
+The absolute gap also hides direction. Track the signed delta:
+
+```
+continuation_delta =
+  self_assessment.continuation_readiness
+  - outcome.continuation.recovery_rating
+```
+
+A positive delta means the predecessor overclaimed readiness; a negative delta
+means it underclaimed. Overclaiming is usually the higher-risk failure because
+the successor may act on state that is less recoverable than promised.
+
+`stale_path_revived` may only become knowable retrospectively. Omit it when it
+was not assessed; use `false` only when an evaluator checked and found no stale
+path revival. Its absence is weak evidence, not a successful result.
+
+Likewise, a readiness score with no continuation outcome remains unverified.
+Missing recovery evidence must never be interpreted as a successful handoff.
 
 **A signal is not the handoff.** The handoff carries the smallest sufficient
 task state. The signal measures whether that state survived the transition.
