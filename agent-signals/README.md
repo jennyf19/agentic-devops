@@ -108,8 +108,9 @@ Two core types:
 ```json
 {
   "signal_type": "execution",
-  "schema_version": "0.1.0",
+  "schema_version": "0.1.1",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
+  "resumed_from_run_id": "7b1d63ec-2a5c-4617-b66a-782881b08dc5",
   "timestamp": "2026-04-08T03:00:00Z",
   "agent_name": "cve-remediation-agent",
   "skill_used": "cve-remediation",
@@ -120,7 +121,8 @@ Two core types:
     "completeness": 5,
     "confidence": 3,
     "tsg_alignment": 2,
-    "developer_experience": 4
+    "developer_experience": 4,
+    "continuation_readiness": 4
   },
 
   "patterns": {
@@ -140,13 +142,21 @@ Two core types:
 ```json
 {
   "signal_type": "outcome",
-  "schema_version": "0.1.0",
+  "schema_version": "0.1.1",
   "run_id": "ae02e3f3-42e9-43bd-ae7a-19757f5456ed",
   "timestamp": "2026-04-08T03:15:00Z",
   "agent_name": "quality-evaluator",
   "quality_rating": 4,
   "effort_to_merge": "minimal",
-  "issues_found": ["Edge case in test coverage for multi-module rollback"]
+  "issues_found": ["Edge case in test coverage for multi-module rollback"],
+
+  "continuation": {
+    "recovery_rating": 3,
+    "effort_to_resume": "moderate",
+    "provenance_loss": "minor",
+    "authority_loss": "none",
+    "stale_path_revived": false
+  }
 }
 ```
 
@@ -214,6 +224,73 @@ honesty_gap = |self_assessment.confidence - quality_rating|    (1-5 scale)
 
 Same scale in, same scale out. Trust math should be simple enough to explain
 in one sentence.
+
+### The Continuation Gap
+
+Quality can also be lost between sessions. A predecessor may believe its
+handoff is complete while the next agent has to reconstruct evidence, reopen
+settled decisions, or guess who had authority to choose.
+
+When a task produces a handoff, the working agent may self-assess
+`continuation_readiness` on the same 1–5 scale. A successor or independent
+evaluator records `continuation.recovery_rating` after attempting to resume:
+
+```
+continuation_gap =
+  |self_assessment.continuation_readiness
+   - outcome.continuation.recovery_rating|
+```
+
+The continuation outcome keeps the predecessor's `run_id`, which is what makes
+the gap join possible. The successor starts a new execution `run_id` and sets
+`resumed_from_run_id` to the predecessor:
+
+```
+predecessor execution (run A)
+    → continuation outcome (run A)
+        → successor execution (run B, resumed_from_run_id: run A)
+```
+
+The recovery rating measures what the successor could safely recover:
+
+| Rating | Meaning |
+|--------|---------|
+| 1 | Cannot resume safely from the handoff |
+| 2 | Substantial reconstruction or authority repair required |
+| 3 | Moderate correction required before continuing |
+| 4 | Resumes with minor clarification |
+| 5 | Resumes directly with evidence and decision boundaries intact |
+
+The optional continuation outcome also uses privacy-safe buckets for
+`effort_to_resume`, `provenance_loss`, and `authority_loss`, plus a boolean for
+whether a stale path was revived.
+
+The gap measures calibration, not handoff quality. A predecessor rating itself
+1 and a successor also rating recovery 1 produces a zero gap even though the
+handoff failed. Always track `recovery_rating` and the gap together.
+
+The absolute gap also hides direction. Track the signed delta:
+
+```
+continuation_delta =
+  self_assessment.continuation_readiness
+  - outcome.continuation.recovery_rating
+```
+
+A positive delta means the predecessor overclaimed readiness; a negative delta
+means it underclaimed. Overclaiming is usually the higher-risk failure because
+the successor may act on state that is less recoverable than promised.
+
+`stale_path_revived` may only become knowable retrospectively. Omit it when it
+was not assessed; use `false` only when an evaluator checked and found no stale
+path revival. Its absence is weak evidence, not a successful result.
+
+Likewise, a readiness score with no continuation outcome remains unverified.
+Missing recovery evidence must never be interpreted as a successful handoff.
+
+**A signal is not the handoff.** The handoff carries the smallest sufficient
+task state. The signal measures whether that state survived the transition.
+Do not copy code, names, decisions, or full task context into telemetry.
 
 ---
 

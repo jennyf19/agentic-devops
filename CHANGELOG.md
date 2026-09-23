@@ -2,6 +2,16 @@
 
 All notable changes to Agentic DevOps will be documented here.
 
+## [Unreleased]
+
+### Added
+- Agent Signals continuation-gap fields for measuring whether a successor can
+  safely recover a handoff without reconstructing provenance, authority, or
+  invalidated paths; schema `0.1.1` remains compatible with `0.1.0` signals
+- Successor lineage through `resumed_from_run_id`, signed continuation-delta
+  guidance, and explicit handling for missing or retrospectively observable
+  continuation outcomes
+
 ## [0.4.0] - 2026-08-14
 
 ### Added
