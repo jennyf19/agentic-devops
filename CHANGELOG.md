@@ -5,6 +5,7 @@ All notable changes to Agentic DevOps will be documented here.
 ## [Unreleased]
 
 ### Added
+- Pace card, nav link, and page pointing to https://github.com/jennyf19/pace
 - Agent Signals continuation-gap fields for measuring whether a successor can
   safely recover a handoff without reconstructing provenance, authority, or
   invalidated paths; schema `0.1.1` remains compatible with `0.1.0` signals

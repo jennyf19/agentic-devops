@@ -93,6 +93,15 @@ verifiable work.
 > proposal. A separate check verifies the answer. Copilot keeps authority.
 > Research preview, not autonomous local development, and not a savings claim.
 
+### "I want to know what my agent actually costs"
+
+Open **[Pace](https://github.com/jennyf19/pace)** — measure the whole agent
+run, move fixed-rule work into code, and keep the model for real judgment.
+
+> Profile Copilot CLI sessions and direct model calls, then compare a baseline
+> and a candidate against the same quality check. A change counts as a win only
+> when the answer is still right and the measurements are complete.
+
 ---
 
 ## Getting Started
